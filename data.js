@@ -7,7 +7,7 @@ export const product = [
         price: 77.99,
         rating: 4.3,
         stock: 100,
-        images:[
+        images: [
             "https://picsum.photos/200",
             "https://picsum.photos/200",
             "https://picsum.photos/200",
@@ -44,7 +44,7 @@ export const product = [
         price: 77.99,
         rating: 4.3,
         stock: 100,
-        images:[
+        images: [
             "https://picsum.photos/200",
             "https://picsum.photos/200",
             "https://picsum.photos/200",
@@ -81,7 +81,7 @@ export const product = [
         price: 77.99,
         rating: 4.3,
         stock: 100,
-        images:[
+        images: [
             "https://picsum.photos/200",
             "https://picsum.photos/200",
             "https://picsum.photos/200",
@@ -118,7 +118,7 @@ export const product = [
         price: 77.99,
         rating: 4.3,
         stock: 100,
-        images:[
+        images: [
             "https://picsum.photos/200",
             "https://picsum.photos/200",
             "https://picsum.photos/200",
@@ -150,24 +150,19 @@ export const product = [
 ]
 
 export const categories = [
-    {
-        id: 1,
-        title: 'Electronics',
-        image: 'https://picsum.photos/200',
-    },
-    {
-        id: 2,
-        title: 'Fashion',
-        image: 'https://picsum.photos/200',
-    },
-    {
-        id: 3,
-        title: 'Beauty',
-        image: 'https://picsum.photos/200',
-    },
-    {
-        id: 4,
-        title: 'Fresh Fruit',
-        image: 'https://picsum.photos/200',
-    }
+    {id: 1, name: 'Electronics', icon: 'phone-portrait'},
+    {id: 2, name: 'Fashion', icon: 'shirt'},
+    {id: 3, name: 'Beauty', icon: 'heart'},
+    {id: 4, name: 'Fresh Fruit', icon: 'leaf'},
+]
+export const user = [
+    {}
+]
+export const bottomNav = [
+    {id: 1, name: 'Home', icon: 'home', color: '#000'},
+    {id: 2, name: 'Search', icon: 'search', color: '#aaa'},
+    {id: 3, name: 'Favorite', icon: 'heart', color: '#aaa'},
+    {id: 4, name: 'Inbox', icon: 'mail', color: '#aaa'},
+    {id: 5, name: 'Account', icon: 'person', color: '#aaa'},
+
 ]
