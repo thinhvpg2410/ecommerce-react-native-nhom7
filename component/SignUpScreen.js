@@ -1,8 +1,8 @@
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
-import { TextInput } from 'react-native-paper';
+import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import React, {useState} from 'react';
+import {TextInput} from 'react-native-paper';
 
-export default function SignUpScreen({ navigation }) {
+export default function SignUpScreen({navigation}) {
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword1, setShowPassword1] = useState(false);
     const [email, setEmail] = useState('');
@@ -34,50 +34,61 @@ export default function SignUpScreen({ navigation }) {
             alert('Confirm password does not match');
             return;
         }
-        setUsers([...users, { email, password }]);
+
         alert('Account created successfully');
-        navigation.navigate('SignIn', { users: [...users, { email, password }] });
+        navigation.navigate('SignIn', {users: [...users, {email, password}]});
     };
 
     return (
         <View style={styles.container}>
-            <View style={{ alignItems: 'center' }}>
-                <Image source={require('../assets/logo.jpg')} style={{ width: 200, height: 200 }} resizeMode="contain" />
+            <View style={{alignItems: 'center'}}>
+                <Image source={require('../assets/logo.jpg')} style={{width: 200, height: 200}} resizeMode="contain"/>
             </View>
             <View>
-                <Text style={{ textAlign: 'center', fontSize: 35, fontWeight: 'bold' }}>SIGN UP</Text>
+                <Text style={{textAlign: 'center', fontSize: 35, fontWeight: 'bold'}}>SIGN UP</Text>
             </View>
-            <View style={{ alignItems: 'center' }}>
-                <TextInput 
+            <View style={{alignItems: 'center'}}>
+                <TextInput
                     placeholder='Full name'
                     placeholderTextColor="grey"
                     style={styles.input}
                 />
-                <TextInput 
+                <TextInput
                     placeholder='Email'
                     placeholderTextColor="grey"
                     onChangeText={setEmail}
                     style={styles.input}
                 />
-                <TextInput 
+                <TextInput
                     placeholder='Password'
                     placeholderTextColor="grey"
                     onChangeText={setPassword}
                     style={styles.input}
                     secureTextEntry={!showPassword}
                     right={
-                        <TextInput.Icon icon={showPassword ? 'eye-off' : 'eye'} size={30} color="orange" onPress={() => setShowPassword(!showPassword)} />
+                        <TextInput.Icon icon={showPassword ? 'eye-off' : 'eye'}
+                                        size={30}
+                                        color="orange"
+                                        onPress={() =>
+                                            setShowPassword(!showPassword)}/>
                     }
                 />
-                <TextInput 
+                <TextInput
                     placeholder='Confirm your password'
-                    onBlur={() => { if (password && confirmPassword && confirmPassword !== password) alert('Confirm password does not match'); }}
+                    onBlur={() => {
+                        if (password && confirmPassword && confirmPassword !== password)
+                            alert('Confirm password does not match');
+                    }}
                     placeholderTextColor="grey"
                     style={styles.input}
                     secureTextEntry={!showPassword1}
                     onChangeText={setConfirmPassword}
                     right={
-                        <TextInput.Icon icon={showPassword1 ? 'eye-off' : 'eye'} size={30} color="orange" onPress={() => setShowPassword1(!showPassword1)} />
+                        <TextInput.Icon icon={showPassword1 ? 'eye-off' : 'eye'}
+                                        size={30}
+                                        color="orange"
+                                        onPress={() =>
+                                            setShowPassword1(!showPassword1)}/>
                     }
                 />
             </View>
@@ -87,12 +98,11 @@ export default function SignUpScreen({ navigation }) {
                 </TouchableOpacity>
             </View>
             <View style={styles.footer}>
-                <Text style={{ fontSize: 17 }}>Already have an account? </Text>
+                <Text style={{fontSize: 17}}>Already have an account? </Text>
                 <TouchableOpacity onPress={() => {
-                    alert('Navigating to SignIn...');
-    console.log('Navigating to SignIn...');
-    navigation.navigate('SignIn');
-}}>
+                    console.log('Navigating to SignIn...');
+                    navigation.navigate('SignIn');
+                }}>
                     <Text style={styles.loginText}> Log In</Text>
                 </TouchableOpacity>
             </View>
