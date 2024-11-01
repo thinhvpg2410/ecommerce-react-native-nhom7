@@ -7,7 +7,11 @@ export default function SignInScreen({navigation, route}) {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const userList = [...route.params.users,
+    // const userList = [...route.params.users,
+    //     {id: 1, email: 'nguyenvana@gmail.com', password: '123456'},
+    //     {id: 2, email: 'hotram@gmail.com', password: '123'},
+    // ]
+    const userList = route?.params?.users || [
         {id: 1, email: 'nguyenvana@gmail.com', password: '123456'},
         {id: 2, email: 'hotram@gmail.com', password: '123'},
     ]
