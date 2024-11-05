@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image, Alert} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Alert, Modal, TextInput} from 'react-native';
 
 const PaymentMethodSelectScreen = ({route, navigation}) => {
     const [selectedMethod, setSelectedMethod] = useState(null)
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [newCardNumber, setNewCardNumber] = useState('');
+    const [newPayPalEmail, setNewPayPalEmail] = useState('');
+
     const {totalAmount} = route.params
-    const paymentMethods = [
+    const [paymentMethods, setPaymentMethods] = useState([
         {id: '1', name: 'Visa', number: '2334', image: 'https://placehold.co/50x30', type: 'Visa'},
         {id: '2', name: 'Mastercard', number: '3774', image: 'https://placehold.co/50x30', type: 'Mastercard'},
         {id: '3', name: 'PayPal', email: 'abc@gmail.com', image: 'https://placehold.co/50x30', type: 'PayPal'},
-    ];
+    ]);
     const handlePayment = () => {
         if (!selectedMethod) {
             Alert.alert('Please select a payment method');
@@ -16,13 +20,52 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
         }
         Alert.alert('Payment Successful', `You have paid $${totalAmount} using ${selectedMethod.type}`);
         navigation.navigate('PaymentSuccessScreen', {
-            subtotal: 2800,
-            tax: 280,
+            subtotal: {totalAmount},
+            tax: 0,
             fees: 0,
-            totalAmount: 3080,
+            totalAmount: {totalAmount},
             cardType: 'Visa',
             cardNumber: '2334'
         });
+    };
+
+    const handleAddPayment = () => {
+        setModalVisible(true);
+    };
+
+    const handleAddCard = () => {
+        setSelectedMethod('Card');
+    };
+
+    const handleAddPayPal = () => {
+        setSelectedMethod('PayPal');
+    };
+
+    const handleSavePayment = () => {
+        if (selectedMethod === 'Card' && newCardNumber) {
+            setPaymentMethods([...paymentMethods, {
+                id: Math.random().toString(),
+                type: 'Visa',
+                number: `**** ${newCardNumber.slice(-4)},`,
+                image: 'https://placehold.co/50x30',
+            }]);
+            Alert.alert('Success', 'Card added successfully');
+        } else if (selectedMethod === 'PayPal' && newPayPalEmail) {
+            setPaymentMethods([...paymentMethods, {
+                id: Math.random().toString(),
+                type: 'PayPal',
+                email: newPayPalEmail,
+                image: 'https://placehold.co/50x30',
+            }]);
+            Alert.alert('Success', 'PayPal added successfully');
+        } else {
+            Alert.alert('Error', 'Please enter valid information');
+            return;
+        }
+        setModalVisible(false);
+        setSelectedMethod(null);
+        setNewCardNumber('');
+        setNewPayPalEmail('');
     };
     const renderPaymentMethod = (method) => (
         <TouchableOpacity
@@ -45,6 +88,7 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
             <View style={styles.radioCircle}>
                 {selectedMethod?.id === method.id && <View style={styles.selectedRb}/>}
             </View>
+
         </TouchableOpacity>
     );
     return (
@@ -59,9 +103,55 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
                 <Text style={styles.payButtonText}>Pay now</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.addCardButton}>
+            <TouchableOpacity style={styles.addCardButton} onPress={handleAddPayment}>
                 <Text style={styles.addCardText}>+ Add new card</Text>
             </TouchableOpacity>
+
+            <Modal visible={isModalVisible} transparent={true} animationType="slide">
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        {!selectedMethod ? (
+                            <>
+                                <Text style={styles.modalTitle}>Add Payment Method</Text>
+                                <TouchableOpacity onPress={handleAddCard} style={styles.modalOption}>
+                                    <Text>Add Card</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={handleAddPayPal} style={styles.modalOption}>
+                                    <Text>Add PayPal</Text>
+                                </TouchableOpacity>
+                            </>
+                        ) : (
+                            <>
+                                <Text style={styles.modalTitle}>Add {selectedMethod}</Text>
+                                {selectedMethod === 'Card' && (
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter card number"
+                                        keyboardType="numeric"
+                                        value={newCardNumber}
+                                        onChangeText={setNewCardNumber}
+                                    />
+                                )}
+                                {selectedMethod === 'PayPal' && (
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Enter PayPal email"
+                                        keyboardType="email-address"
+                                        value={newPayPalEmail}
+                                        onChangeText={setNewPayPalEmail}
+                                    />
+                                )}
+                                <TouchableOpacity onPress={handleSavePayment} style={styles.saveButton}>
+                                    <Text style={styles.saveButtonText}>Save</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                            <Text style={styles.closeButtonText}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -153,6 +243,53 @@ const styles = StyleSheet.create({
         color: '#ff6600',
         fontSize: 16,
     },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        margin: 20,
+        borderRadius: 10
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center'
+    },
+    modalOption: {
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd'
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        padding: 10,
+        marginVertical: 10,
+        borderRadius: 5
+    },
+    saveButton: {
+        backgroundColor: '#ff6600',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 20
+    },
+    saveButtonText: {
+        color: '#fff',
+        fontSize: 16
+    },
+    closeButton: {
+        marginTop: 10,
+        alignItems: 'center'
+    },
+    closeButtonText: {
+        color: '#888'
+    }
 });
 
 export default PaymentMethodSelectScreen;
