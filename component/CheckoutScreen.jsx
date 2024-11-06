@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet} from 'react-native';
+import Icon from "react-native-vector-icons/Ionicons";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
 const CheckoutScreen = ({navigation}) => {
@@ -40,6 +42,15 @@ const CheckoutScreen = ({navigation}) => {
             image: 'https://placehold.co/50'
         },
     ]);
+    const handleIncreaseQuantity = (id) => {
+        setCartItems(cartItems.map(item => item.id === id ? {...item, quantity: item.quantity + 1} : item));
+    };
+
+    const handleDecreaseQuantity = (id) => {
+        setCartItems(cartItems.map(item =>
+            item.id === id && item.quantity > 1 ? {...item, quantity: item.quantity - 1} : item
+        ));
+    };
 
     const toggleEditMode = () => {
         setIsEditMode(!isEditMode);
@@ -62,14 +73,23 @@ const CheckoutScreen = ({navigation}) => {
                 <Text style={styles.itemDescription}>{item.description}</Text>
                 <Text style={styles.itemPrice}>${item.price}</Text>
             </View>
-            <Text style={styles.itemQuantity}>x{item.quantity}</Text>
+            <View style={styles.quantityContainer}>
+                <TouchableOpacity onPress={() => handleDecreaseQuantity(item.id)} style={styles.quantityButton}>
+                    <Text style={styles.quantityButtonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{item.quantity}</Text>
+                <TouchableOpacity onPress={() => handleIncreaseQuantity(item.id)} style={styles.quantityButton}>
+                    <Text style={styles.quantityButtonText}>+</Text>
+                </TouchableOpacity>
+            </View>
             {isEditMode ? (
                 <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteItem(item.id)}>
-                    <Text style={styles.deleteButtonText}>Delete</Text>
+                    <Icon name="trash" size={wp('1%')}/>
+                    {/*<Text style={styles.deleteButtonText}>Delete</Text>*/}
                 </TouchableOpacity>
             ) : (
                 <TouchableOpacity style={styles.editButton} onPress={toggleEditMode}>
-                    <Text>✎</Text>
+                    <Icon name="pencil" size={wp('1%')}/>
                 </TouchableOpacity>
             )}
         </View>
@@ -218,7 +238,28 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-
+    quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 1,
+        marginRight: 8
+    },
+    quantityButton: {
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#ddd',
+        borderRadius: 4,
+    },
+    quantityButtonText: {
+        fontSize: 18,
+        color: '#333',
+    },
+    quantityText: {
+        fontSize: 16,
+        marginHorizontal: 12,
+    },
     deleteButton: {
         paddingHorizontal: 8,
         paddingVertical: 4,
