@@ -3,6 +3,7 @@ import {View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet} fr
 
 
 const CheckoutScreen = ({navigation}) => {
+    const [isEditMode, setIsEditMode] = useState(false)
 
     const [voucher, setVoucher] = useState('')
     const [cartItems, setCartItems] = useState([
@@ -40,6 +41,15 @@ const CheckoutScreen = ({navigation}) => {
         },
     ]);
 
+    const toggleEditMode = () => {
+        setIsEditMode(!isEditMode);
+    };
+
+    const handleDeleteItem = (id) => {
+        setCartItems(cartItems.filter(item => item.id !== id));
+    };
+
+
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
     };
@@ -53,20 +63,42 @@ const CheckoutScreen = ({navigation}) => {
                 <Text style={styles.itemPrice}>${item.price}</Text>
             </View>
             <Text style={styles.itemQuantity}>x{item.quantity}</Text>
-            <TouchableOpacity style={styles.editButton}>
-                <Text>✎</Text>
-            </TouchableOpacity>
+            {isEditMode ? (
+                <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteItem(item.id)}>
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                </TouchableOpacity>
+            ) : (
+                <TouchableOpacity style={styles.editButton} onPress={toggleEditMode}>
+                    <Text>✎</Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Checkout</Text>
-            <FlatList
-                data={cartItems}
-                renderItem={renderCartItem}
-                keyExtractor={(item) => item.id}
-                style={styles.cartList}
-            />
+            <Text style={styles.title}>Checkout</Text>
+            <View style={styles.header}>
+                <Text style={styles.title}></Text>
+                <TouchableOpacity onPress={toggleEditMode} style={styles.editButton}>
+                    <Text>{isEditMode ? 'Done' : 'Edit'}</Text>
+                </TouchableOpacity>
+            </View>
+            {cartItems.length === 0 ? (
+                <View style={styles.emptyCartContainer}>
+                    <Text style={styles.emptyCartText}>Your cart is empty</Text>
+                    <TouchableOpacity style={styles.continueShoppingButton} onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.continueShoppingText}>Continue Shopping</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <FlatList
+                    data={cartItems}
+                    renderItem={renderCartItem}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.listContainer}
+                />
+            )}
+
             <View style={styles.voucherContainer}>
                 <TextInput
                     style={styles.voucherInput}
@@ -82,7 +114,9 @@ const CheckoutScreen = ({navigation}) => {
                 <Text style={styles.totalLabel}>TOTAL</Text>
                 <Text style={styles.totalAmount}>${calculateTotal()}</Text>
             </View>
-            <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('PaymentMethod',{ totalAmount: calculateTotal() } )}>
+
+            <TouchableOpacity style={styles.nextButton}
+                              onPress={() => navigation.navigate('PaymentMethod', {totalAmount: calculateTotal()})}>
                 <Text style={styles.nextButtonText}>Next →</Text>
             </TouchableOpacity>
         </View>
@@ -95,11 +129,17 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#fff',
     },
-    header: {
+    title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 10,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
     },
     cartList: {
         flexGrow: 0,
@@ -137,7 +177,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     editButton: {
-        padding: 5,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        backgroundColor: '#ddd',
+        borderRadius: 4,
     },
     voucherContainer: {
         flexDirection: 'row',
@@ -175,6 +218,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+
+    deleteButton: {
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        backgroundColor: '#ff4d4d',
+        borderRadius: 4,
+    },
+    deleteButtonText: {
+        color: '#fff',
+    },
+    editModeButton: {
+        marginTop: 16,
+        padding: 12,
+        alignItems: 'center',
+        backgroundColor: '#ffa500',
+        borderRadius: 8,
+    },
     totalAmount: {
         fontSize: 18,
         fontWeight: 'bold',
@@ -191,6 +251,29 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    listContainer: {
+        paddingBottom: 16,
+    },
+    emptyCartContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyCartText: {
+        fontSize: 18,
+        color: '#888',
+        marginBottom: 20,
+    },
+    continueShoppingButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#ff6f00',
+        borderRadius: 5,
+    },
+    continueShoppingText: {
+        color: '#fff',
+        fontSize: 16,
     },
 });
 export default CheckoutScreen;
