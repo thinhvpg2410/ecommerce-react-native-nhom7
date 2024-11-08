@@ -7,17 +7,21 @@ import SignInScreen from './component/SignInScreen'
 import SignUpScreen from './component/SignUpScreen'
 import HomeScreen from './component/HomeScreen';
 import FreshFruitDetail from './component/FreshFruitDetail';
+import CheckoutScreen from "./component/CheckoutScreen";
+import Test from "./component/Test";
 
 const Stack = createStackNavigator();
 
 export default function App() {
     return (
+
         <NavigationContainer>
             <Stack.Navigator initialRouteName='FreshFruit'>
                 <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="SignIn" component={SignInScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="FreshFruit" component={FreshFruitDetail} options={{headerShown: false}}/>
+                <Stack.Screen name="Cart" component={CheckoutScreen} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

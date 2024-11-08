@@ -3,6 +3,7 @@ import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity, ScrollView, T
 import Icon from 'react-native-vector-icons/Ionicons';
 import {bottomNav, categories} from "../data";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import CommonLayout from "./CommonLayout";
 
 export default function HomeScreen({navigation}) {
 
@@ -13,7 +14,7 @@ export default function HomeScreen({navigation}) {
     ];
 
     const renderCategories = ({item}) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={()=>handleCategories(item)}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => handleCategories(item)}>
             <Icon name={item.icon} size={wp('10%')} color="#555"/>
             <Text style={styles.categoryText}>{item.name}</Text>
         </TouchableOpacity>
@@ -27,15 +28,7 @@ export default function HomeScreen({navigation}) {
             <Text style={styles.productPrice}>${item.price}</Text>
         </TouchableOpacity>
     )
-    const handleNavPress = (item) => {
-        console.log(`Navigating to ${item.name}`);
-    };
 
-    // const renderBottomNavItem = ({item}) => (
-    //     <TouchableOpacity onPress={() => handleNavPress(item)} style={styles.bottomNavItem}>
-    //         <Icon name={item.icon} size={wp('6%')} color={item.color}/>
-    //     </TouchableOpacity>
-    // );
     const handleCategories = (item) => {
         console.log(`${item.name}`)
     }
@@ -43,15 +36,8 @@ export default function HomeScreen({navigation}) {
         console.log()
     }
     return (
-        <View style={styles.container}>
+        <CommonLayout title={'All Deals'}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>All Deals</Text>
-                    <TouchableOpacity style={styles.profile}>
-                        <Icon name="person-circle" size={wp('10%')} color="#000"/>
-                    </TouchableOpacity>
-                </View>
-
                 <View style={styles.searchBar}>
                     <Icon name="search" size={wp('5%')} color="#aaa"/>
                     <TextInput
@@ -100,36 +86,8 @@ export default function HomeScreen({navigation}) {
                 </View>
             </ScrollView>
 
-            <View style={styles.bottomNav}>
-                <TouchableOpacity>
-                    <Icon name="home" size={wp('6%')} color="#000"/>
-                </TouchableOpacity>
+        </CommonLayout>
 
-                <TouchableOpacity>
-                    <Icon name="search" size={wp('6%')} color="#aaa"/>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                    <Icon name="heart" size={wp('6%')} color="#aaa"/>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                    <Icon name="mail" size={wp('6%')} color="#aaa"/>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                    <Icon name="person" size={wp('6%')} color="#aaa"/>
-                </TouchableOpacity>
-
-                {/*<FlatList*/}
-                {/*    data={bottomNav}*/}
-                {/*    horizontal*/}
-                {/*    renderItem={renderBottomNavItem}*/}
-                {/*    keyExtractor={(item) => item.id}*/}
-                {/*    showsHorizontalScrollIndicator={false}*/}
-                {/*/>*/}
-            </View>
-        </View>
 
     );
 
