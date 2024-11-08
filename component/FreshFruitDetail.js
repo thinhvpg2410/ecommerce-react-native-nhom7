@@ -8,8 +8,12 @@ import Swiper from 'react-native-swiper';
 const windowWidth = Dimensions.get('window').width;
 export default function FreshFruitDetail({ navigation, route }) {
     const [showAll,setShowAll]=useState(false)
+    const [showAllRelevant,setShowAllRelevant]=useState(false)
     const tooggleShowAll= ()=>{
         setShowAll(!showAll)
+    }
+    const tooggleShowAllRelevant= ()=>{
+        setShowAllRelevant(!showAllRelevant)
     }
     const imgs_banner = [
         require('../assets/banner-FreshFruit1.png'),
@@ -52,9 +56,37 @@ export default function FreshFruitDetail({ navigation, route }) {
             rating: require('../assets/Rating1.png'),
             img: require('../assets/bell_pepper.png')
         },
+        {
+            id:5,
+            name:'Peach',
+            price:'$15',
+            rating: require('../assets/Rating1.png'),
+            img: require('../assets/Peach.png'),
+            category:'Relevant',
+        },
+        {
+            id:6,
+            name:'Pomegranate',
+            price:'$24',
+            rating: require('../assets/Rating1.png'),
+            img: require('../assets/Pome.png'),
+            category:'Relevant',
+        },
+        {
+            id:6,
+            name:'Grape',
+            price:'$30',
+            rating: require('../assets/Rating1.png'),
+            img: require('../assets/grape.png'),
+            category:'Relevant',
+        },
+        
 
     ]
-    const displayProduct= showAll?fresh_fruit_data: fresh_fruit_data.slice(0,4);
+    const relevantProducts = fresh_fruit_data.filter(item => item.category === 'Relevant');
+    const normalProducts = fresh_fruit_data.filter(item => item.category !== 'Relevant');
+    const displayProduct= showAll?normalProducts: normalProducts.slice(0,4);
+    const displayRelevantProduct= showAllRelevant?relevantProducts:relevantProducts.slice(0,2);
     return (
         <View style={styles.container}>
             {/* header */}
@@ -135,6 +167,45 @@ export default function FreshFruitDetail({ navigation, route }) {
                 <Text style={{color:'#FF6C44', fontSize:15, textAlign:'center',color:'#565E6C'}}> {showAll?'Show Less':'Show All' } </Text>
             </TouchableOpacity>
             </View>
+                <View style={{margin:25,flexDirection:'row', alignItems:'center',justifyContent:'space-between'}}>
+                    <Text style={{fontSize:20,fontWeight:600}}>Relevent products</Text>
+                    <TouchableOpacity onPress={tooggleShowAllRelevant}>
+                    <Text style={{color:'#9095A0', fontSize:15}}> {showAllRelevant?'See Less':'See All'} > </Text>
+                    </TouchableOpacity>
+                </View>
+           <View style={{flex:1}}>
+           <FlatList
+            data={displayRelevantProduct}
+            keyExtractor={item => item.id}
+            renderItem={
+                ({item})=>(
+                    <View style={{flex:1, borderWidth:1, margin:5,borderRadius:5,borderColor:'#F3F4F6', marginHorizontal:10, flexDirection:'row', justifyContent:'space-between'}}>
+                        <View style={{flexDirection:'row', margin:10}}> 
+                            <Image source={item.img} resizeMode='contain' style={{width:80, height:80}}/>
+                            <View style={{justifyContent:'space-around', marginLeft:10}}>
+                                <Text style={{fontWeight:500, fontSize:16}}>{item.name}</Text>
+                                <Image source={item.rating} />
+                                
+                            </View>
+                        </View>
+
+                            <View style={{justifyContent:'space-around', marginRight:10}}>
+                                <TouchableOpacity>
+                                    <Image source={require('../assets/Button_Add.png')}/>
+                                    
+                                </TouchableOpacity>
+                                <Text style={{fontWeight:600, fontSize:16}}>{item.price}</Text>
+                            </View>
+                        
+
+                    </View>
+
+                )
+            }   
+           />
+            
+           </View>
+
         </ScrollView>
 
 
@@ -162,7 +233,7 @@ export default function FreshFruitDetail({ navigation, route }) {
             </View>
     </View>
         
-    );
+    ); 
 }
 
 const styles = StyleSheet.create({
@@ -188,7 +259,8 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 200,
-        borderRadius: 10,
+        borderRadius: 5,
         resizeMode: 'cover',
-    }
+    },
+    
 });
