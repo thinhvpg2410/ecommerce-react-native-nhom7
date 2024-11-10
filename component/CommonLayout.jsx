@@ -114,8 +114,6 @@ const styles = StyleSheet.create({
          borderTopWidth: 1,
         borderTopColor: '#f0f0f0',
         backgroundColor: '#fff',
-        height: '33%'
-
         
     },
 });
