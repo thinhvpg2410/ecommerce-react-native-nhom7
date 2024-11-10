@@ -38,59 +38,227 @@ export default function FreshFruitDetail({navigation, route}) {
             name: 'Pear',
             price: '$3',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/Pearl.png')
+            img: [
+                 require('../assets/Pearl.png'),
+                 require('../assets/le-nam-phi-18.jpg'),
+                 require('../assets/pears-south-africa-201807-08.png')
+            ],
+            star:4.5,
+            review: 99,
+            description: 'Pear is a sweet fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {
+                userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+
+            ]
         },
         {
             id: 2,
             name: 'Avocado',
             price: '$4',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/Avocado.png')
+            img: [
+            require('../assets/Avocado.png'),
+            require('../assets/bo1.jpg'),
+
+            ],
+            star:4.1,
+            review: 100,
+            description:'Avocado is a fruit that is said to be rich in healthy fats, fiber, and various vitamins and minerals. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+                {userName: 'John',
+                    userAvatar: require('../assets/doraemon2.png'),
+                    comment: 'So fresh, I have never eaten this before!! So sweet',
+                    Date: '2 week ago',
+                },
+
+            ]
         },
         {
             id: 3,
             name: 'Cherry',
             price: '$10',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/Cherry.png')
+            img: [
+            require('../assets/Cherry.png'),
+            require('../assets/Cherry.png')
+
+
+            ],
+            star:4.2,
+            review: 150,
+            description:'Cherry is a fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+                {userName: 'Cute Doraemon',
+                    userAvatar: require('../assets/doraemon2.png'),
+                    comment: 'So fresh, I have never eaten this before!! So sweet',
+                    Date: '1 week ago',
+                },
+
+            ]
         },
         {
             id: 4,
             name: 'Orange',
             price: '$7',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/Orange.png')
+            img:[
+            require('../assets/Orange.png'),
+            require('../assets/Orange1.png')
+            ],
+            star:5,
+            review: 50,
+            description:'Orange is a fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+
+            ]
         },
         {
             id: 5,
             name: 'bell pepper',
             price: '$7',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/bell_pepper.png')
+            img:[
+                 require('../assets/bell_pepper.png'),
+                 require('../assets/bell1.jpg')
+            ],
+            star:4.5,
+            review: 99,
+            description:'Bell pepper is a fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+
+            ]
         },
         {
             id: 6,
             name: 'Peach',
             price: '$15',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/Peach.png'),
+            img: [
+                require('../assets/Peach.png'),
+                require('../assets/peach1.jpg')
+            ],
             category: 'Relevant',
+            star:4.5,
+            review: 99,
+            description:'Peach is a fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+
+            ]
         },
         {
             id: 7,
             name: 'Pomegranate',
             price: '$24',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/Pome.png'),
+            img: [
+                require('../assets/Pome.png'),
+                require('../assets/Pomegranate1.jpg')
+
+            ],
             category: 'Relevant',
+            star:4.5,
+            review: 99,
+            description:'Pomegranate is a fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+
+            ]
         },
         {
             id: 8,
             name: 'Grape',
             price: '$30',
             rating: require('../assets/Rating1.png'),
-            img: require('../assets/grape.png'),
+            img: [
+                require('../assets/grape.png'),
+                require('../assets/grape1.jpg')
+            ],
+            star: 4.5,
+            review: 99,
             category: 'Relevant',
+            description:'Grape is a fruit that is said to be rich in antioxidants, dietary fiber, and vitamin C. It is also said to be good for the heart and may help in weight loss.',
+            comments:[
+                {userName: 'Thu Trầm',
+                userAvatar: require('../assets/avt_doraemon.png'),
+                comment: 'I love this',
+                Date: 'A day ago'
+                },
+                {userName: 'Trầm Hồ',
+                    userAvatar: require('../assets/avt_doraemon.png'),
+                    comment: 'Delicious, I will buy it again',
+                    Date: '3 days ago',
+                },
+
+            ]
         },
 
 
@@ -117,7 +285,7 @@ export default function FreshFruitDetail({navigation, route}) {
             <View style={{flex:10}}>
             <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false}>
             {/* banner */}
-            <View style={{width:'100%', height:'15%', marginBottom:15}}>
+            <View style={{width:'100%', height:150, marginBottom:15}}>
             <Swiper
             style={{height:'100%', height:'100%'}}
            dot={<View style={{backgroundColor: 'rgba(0,0,0,.2)', width: 10, height: 10, borderRadius: 4, margin: 3}} />}
@@ -138,17 +306,19 @@ export default function FreshFruitDetail({navigation, route}) {
                 }
             </Swiper>
             </View>
+            
                 
                 {/* fresh fruit */}
-    
+                <View>
             <View style={{flex:1}}>
             <FlatList
                 data={displayProduct}
                 keyExtractor={item => item.id}
                 renderItem={
                     ({item})=>(
-                        <View style={{borderColor:'#BCC1CA',borderWidth:1,width:'48%', marginVertical:5, marginRight:6, borderRadius:15}}>
-                            <Image source={item.img} style={{backgroundColor:'#F3F4F6', width:'100%',height:150, borderRadius:15}}/>
+                        <TouchableOpacity style={{borderColor:'#BCC1CA',borderWidth:1,width:'48%', marginVertical:5, marginRight:6, borderRadius:15}}
+                        onPress={()=>{navigation.navigate('DetailFreshFruit',{np:item})}}>
+                            <Image source={item.img[0]} style={{backgroundColor:'#F3F4F6', width:'100%',height:150, borderRadius:15}}/>
                             <View style={{marginHorizontal:5, marginHorizontal:10}}>
                             <View style={{justifyContent:'space-between',flexDirection:'row', marginTop:5, alignItems:'center'}}>
                                 <Text style={{fontWeight:700}}>{item.name}</Text>
@@ -162,12 +332,13 @@ export default function FreshFruitDetail({navigation, route}) {
                                 <Text style={{fontWeight:700, fontSize:15}}>{item.price}</Text>
                             </View>
                         </View>
-                        </View>
+                        </TouchableOpacity>
                         
                     )
                 }
                 numColumns={2}  
             />
+        </View>
         </View>
         <View>
             <TouchableOpacity onPress={toggleShowAll} style={{borderWidth:1, padding:10, borderRadius:10, marginVertical:10, marginHorizontal:10, alignItems:'center'}}>
@@ -176,7 +347,7 @@ export default function FreshFruitDetail({navigation, route}) {
             </View>  
         
         {/* Relevant Products */}
-       
+       <View>
         <View style={{margin:10,flexDirection:'row', alignItems:'center',justifyContent:'space-between', marginTop:10}}>
                     <Text style={{fontSize:20,fontWeight:600}}>Relevent products</Text>
                     <TouchableOpacity onPress={toggleShowAllRelevant}>
@@ -189,9 +360,10 @@ export default function FreshFruitDetail({navigation, route}) {
             keyExtractor={item => item.id}
             renderItem={
                 ({item})=>(
-                    <View style={{flex:1, borderWidth:1, margin:5,borderRadius:5,borderColor:'#F3F4F6', marginHorizontal:10, flexDirection:'row', justifyContent:'space-between'}}>
+                        <TouchableOpacity style={{flex:1, borderWidth:1, margin:5,borderRadius:5,borderColor:'#F3F4F6', marginHorizontal:10, flexDirection:'row', justifyContent:'space-between'}}
+                        onPress={()=>{navigation.navigate('DetailFreshFruit',{rp:item})}}>
                         <View style={{flexDirection:'row', margin:10}}> 
-                            <Image source={item.img} resizeMode='contain' style={{width:80, height:80}}/>
+                            <Image source={item.img[0]} resizeMode='contain' style={{width:80, height:80}}/>
                             <View style={{justifyContent:'space-around', marginLeft:10}}>
                                 <Text style={{fontWeight:500, fontSize:16}}>{item.name}</Text>
                                 <Image source={item.rating} />
@@ -206,15 +378,19 @@ export default function FreshFruitDetail({navigation, route}) {
                                 </TouchableOpacity>
                                 <Text style={{fontWeight:600, fontSize:16}}>{item.price}</Text>
                             </View>
-                        
+                            </TouchableOpacity>
 
-                    </View>
+                    
 
                 )
             }   
            />
            </View>
+           </View>
+           <View style={{marginBottom:'-700%', opacity:0}}></View>
+         
     </ScrollView>
+   
     </View>
                 
 
