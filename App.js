@@ -8,8 +8,7 @@ import SignUpScreen from './component/SignUpScreen'
 import HomeScreen from './component/HomeScreen';
 import FreshFruitDetail from './component/FreshFruitDetail';
 import CheckoutScreen from "./component/CheckoutScreen";
-import Test from "./component/Test";
-
+import DetailFreshFruitRating from './component/DetailFreshFruitRating';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -22,6 +21,7 @@ export default function App() {
                 <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="FreshFruit" component={FreshFruitDetail} options={{headerShown: false}}/>
                 <Stack.Screen name="Cart" component={CheckoutScreen} options={{headerShown: false}}/>
+                <Stack.Screen name="DetailFreshFruit" component={DetailFreshFruitRating} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
