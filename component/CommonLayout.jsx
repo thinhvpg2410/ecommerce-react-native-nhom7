@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
+        width: '100%',
     },
     title: {
         fontSize: 18,
@@ -103,16 +104,17 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
     content: {
-        flex: 1,
+        flex: 2,
         padding: 15,
     },
     bottomNav: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingVertical: hp('1.5%'),
-        borderTopWidth: 1,
+         borderTopWidth: 1,
         borderTopColor: '#f0f0f0',
         backgroundColor: '#fff',
+        
     },
 });
 
