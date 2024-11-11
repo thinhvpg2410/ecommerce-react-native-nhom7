@@ -1,30 +1,32 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Alert} from 'react-native';
 import "@expo/metro-runtime";
 import {TextInput} from 'react-native-paper';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseApp } from '../component/FirebaseConfig'; 
 
 export default function SignInScreen({navigation, route}) {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const userList = [...route.params.users,
-    //     {id: 1, email: 'nguyenvana@gmail.com', password: '123456'},
-    //     {id: 2, email: 'hotram@gmail.com', password: '123'},
-    // ]
-    const userList = route?.params?.users || [
-        {id: 1, email: 'nguyenvana@gmail.com', password: '123456'},
-        {id: 2, email: 'hotram@gmail.com', password: '123'},
-    ]
+    
     const handleSignIn = () => {
-        const checkUser = userList.find(
-            (user) => user.email === email && user.password === password
-        )
-        if (checkUser) {
-            alert('Login successfully');
-            navigation.navigate('Home');
-        } else {
-            alert('Email or password is incorrect. Please try again');
-        }
+        const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    alert('Đăng nhập thành công');
+    const user = userCredential.user;
+    navigation.navigate('Home');
+    setEmail('');
+    setPassword('');
+
+    
+  })
+  .catch((error) => {
+    alert('Email hoặc mật khẩu không đúng');
+    setEmail('');
+    setPassword('');
+  });
     }
 
     return (
