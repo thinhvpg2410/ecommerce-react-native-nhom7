@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet, Image, Alert} from 'react-nati
 import "@expo/metro-runtime";
 import {TextInput} from 'react-native-paper';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseApp } from '../component/FirebaseConfig'; 
+import { firebaseApp } from '../utils/FirebaseConfig';
 
 export default function SignInScreen({navigation, route}) {
     const [showPassword, setShowPassword] = useState(false);

@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
 import { TextInput } from 'react-native-paper';
-import { firebaseApp } from '../component/FirebaseConfig'; 
+import { firebaseApp } from '../utils/FirebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; 
 
 export default function SignUpScreen({ navigation }) {
