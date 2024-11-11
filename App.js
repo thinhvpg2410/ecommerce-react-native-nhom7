@@ -15,7 +15,7 @@ export default function App() {
     return (
 
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='SignUp'>
+            <Stack.Navigator initialRouteName='SignIn'>
                 <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="SignIn" component={SignInScreen} options={{headerShown: false}}/>
                 <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
@@ -35,3 +35,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
