@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     width:'35%',
     borderRadius: 50,
     textAlign: 'center',
+    width:'auto',
     },
   name: { fontSize: 20,
      fontWeight: '600', 
