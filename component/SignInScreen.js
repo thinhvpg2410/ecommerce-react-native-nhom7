@@ -2,13 +2,25 @@ import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, Alert} from 'react-native';
 import "@expo/metro-runtime";
 import {TextInput} from 'react-native-paper';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { firebaseApp } from '../component/FirebaseConfig'; 
+import { auth } from '../component/FirebaseConfig';
 
 export default function SignInScreen({navigation, route}) {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    
+    const handleForgetPassword=()=>{
+        sendPasswordResetEmail(auth,email)
+        .then(() => {
+            alert('Password Resset Link is Send Scuccessfully');
+        }).catch((error) => {
+            alert(error.message);
+            alert(error .code);
+        });
+     
+    }
     
     const handleSignIn = () => {
         const auth = getAuth();
@@ -65,7 +77,8 @@ export default function SignInScreen({navigation, route}) {
                 />
             </View>
             <View>
-                <TouchableOpacity style={{alignItems: 'flex-end', margin: 5}}>
+                <TouchableOpacity style={{alignItems: 'flex-end', margin: 5}} 
+                onPress={()=>handleForgetPassword()}>
                     <Text style={{color: 'orange', fontSize: 18, fontWeight: 'bold'}}>Forgot password ?</Text>
                 </TouchableOpacity>
             </View>
