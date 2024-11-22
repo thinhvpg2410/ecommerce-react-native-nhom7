@@ -109,7 +109,7 @@ export default function FreshFruitDetail({navigation, route}) {
                             </View>
                             <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:5}}>
                                 <Image source={item.rating} style={{width:80, height:15}}/>
-                                <Text style={{fontWeight:700, fontSize:15}}>{item.price}</Text>
+                                <Text style={{fontWeight:700, fontSize:15}}>${item.price}</Text>
                             </View>
                         </View>
                         </TouchableOpacity>
@@ -156,7 +156,7 @@ export default function FreshFruitDetail({navigation, route}) {
                                     <Image source={require('../assets/Button_Add.png')}/>
                                     
                                 </TouchableOpacity>
-                                <Text style={{fontWeight:600, fontSize:16}}>{item.price}</Text>
+                                <Text style={{fontWeight:600, fontSize:16}}>${item.price}</Text>
                             </View>
                             </TouchableOpacity>
 
