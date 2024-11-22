@@ -3,53 +3,51 @@ import React, { useState } from 'react';
 import { TextInput } from 'react-native-paper';
 import { firebaseApp } from '../component/FirebaseConfig'; 
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; 
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { useUser } from './UserContext';
 
 export default function SignUpScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
-  const [name,setName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const db = getFirestore(firebaseApp);
+
+  const { setUser } = useUser(); 
 
   const handleSignUp = () => {
-    // Lấy auth instance từ firebaseApp
-    const auth = getAuth(firebaseApp);
-
-    // Kiểm tra nếu mật khẩu và xác nhận mật khẩu không trùng khớp
     if (password !== confirmPassword) {
       alert("Confirm password does not match");
-      setConfirmPassword(''); // Xóa giá trị xác nhận mật khẩu
       return;
     }
 
-    // Kiểm tra mật khẩu có ít nhất 6 ký tự không
     if (password.length < 6) {
       alert("Password should be at least 6 characters.");
-      setPassword(''); // Xóa mật khẩu nếu quá ngắn
-      setConfirmPassword(''); // Xóa xác nhận mật khẩu
       return;
     }
 
-    // Tạo người dùng mới bằng email và mật khẩu
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        alert('Đăng ký thành công');
-        navigation.navigate('SignIn');
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+    createUserWithEmailAndPassword(getAuth(), email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setDoc(doc(db, "users", user.uid), {
+          name: name,
+          email: email,
+          createdAt: new Date(),
+        }).then(() => {
+          setUser({ name, email }); 
+          alert('Đăng ký thành công');
+          navigation.navigate('SignIn');
+        }).catch((error) => {
+          alert('Đăng ký thành công');
+          navigation.navigate('SignIn');
+        });
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        alert(`Đăng ký thất bại: ${errorMessage}`);
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+        alert(`Register failed: ${"Email đã đưọc sử dụng"}`);
       });
-  }
+  };
 
   return (
     <View style={styles.container}>
