@@ -1,55 +1,48 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet} from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {getDatabase, ref, onValue, update, remove} from "firebase/database";
+import {getAuth} from "firebase/auth";
+import { firebaseApp } from '../utils/FirebaseConfig';
 
 
 const CheckoutScreen = ({navigation}) => {
     const [isEditMode, setIsEditMode] = useState(false)
-
     const [voucher, setVoucher] = useState('')
-    const [cartItems, setCartItems] = useState([
-        {
-            id: '1',
-            name: 'Headphone',
-            description: 'Consequat ex eu',
-            price: 500,
-            quantity: 1,
-            image: 'https://placehold.co/50'
-        },
-        {
-            id: '2',
-            name: 'Headphone',
-            description: 'Consequat ex eu',
-            price: 300,
-            quantity: 1,
-            image: 'https://placehold.co/50'
-        },
-        {
-            id: '3',
-            name: 'Smartphone',
-            description: 'Consequat ex eu',
-            price: 1000,
-            quantity: 1,
-            image: 'https://placehold.co/50'
-        },
-        {
-            id: '4',
-            name: 'Smartphone',
-            description: 'Consequat ex eu',
-            price: 1000,
-            quantity: 1,
-            image: 'https://placehold.co/50'
-        },
-    ]);
+    const [cartItems, setCartItems] = useState([]);
+    const db = getDatabase(firebaseApp);
+    const auth = getAuth(firebaseApp);
     const handleIncreaseQuantity = (id) => {
-        setCartItems(cartItems.map(item => item.id === id ? {...item, quantity: item.quantity + 1} : item));
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const itemRef = ref(db, `carts/${userId}/${id}`);
+            setCartItems(cartItems.map(item => {
+                if (item.id === id) {
+                    const updatedQuantity = item.quantity + 1;
+                    update(itemRef, { quantity: updatedQuantity });
+                    return { ...item, quantity: updatedQuantity };
+                }
+                return item;
+            }));
+        }
     };
 
     const handleDecreaseQuantity = (id) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id && item.quantity > 1 ? {...item, quantity: item.quantity - 1} : item
-        ));
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const itemRef = ref(db, `carts/${userId}/${id}`);
+            setCartItems(cartItems.map(item => {
+                if (item.id === id && item.quantity > 1) {
+                    const updatedQuantity = item.quantity - 1;
+                    update(itemRef, { quantity: updatedQuantity });
+                    return { ...item, quantity: updatedQuantity };
+                }
+                return item;
+            }));
+        }
     };
 
     const toggleEditMode = () => {
@@ -57,13 +50,50 @@ const CheckoutScreen = ({navigation}) => {
     };
 
     const handleDeleteItem = (id) => {
-        setCartItems(cartItems.filter(item => item.id !== id));
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const itemRef = ref(db, `carts/${userId}/${id}`);
+
+            remove(itemRef)
+                .then(() => {
+                    console.log('Item deleted from database');
+                    // Update local state only after successful deletion from the database
+                    setCartItems(cartItems.filter(item => item.id !== id));
+                })
+                .catch((error) => {
+                    console.error('Error deleting item from database:', error);
+                });
+        } else {
+            console.error('User not authenticated');
+        }
     };
 
 
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     };
+
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const cartRef = ref(db, `carts/${userId}`);
+
+            onValue(cartRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const items = Object.keys(data).map((key) => ({
+                        id: key,
+                        ...data[key],
+                    }));
+                    setCartItems(items);
+                } else {
+                    setCartItems([]);
+                }
+            });
+        }
+    }, []);
 
     const renderCartItem = ({item}) => (
         <View style={styles.cartItem}>
@@ -72,6 +102,8 @@ const CheckoutScreen = ({navigation}) => {
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemDescription}>{item.description}</Text>
                 <Text style={styles.itemPrice}>${item.price}</Text>
+                <Text style={styles.itemPrice}>{item.type}</Text>
+                <Text style={styles.itemPrice}>{item.color}</Text>
             </View>
             <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={() => handleDecreaseQuantity(item.id)} style={styles.quantityButton}>

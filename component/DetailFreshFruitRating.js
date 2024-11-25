@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView , TouchableOpacity, FlatList} from 'react-native';
+import { getDatabase, ref, push, set } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 import CommonLayout from './CommonLayout';
 import "@expo/metro-runtime";
 import Swiper from 'react-native-swiper';
@@ -7,9 +9,30 @@ import Swiper from 'react-native-swiper';
 export default function DetailFreshFruitRating({ route }) {
     // Lấy np hoặc rp từ params
     const { np, rp } = route.params;
-
     // Kiểm tra nếu có dữ liệu np thì hiển thị np, nếu không có np thì hiển thị rp
     const dataToDisplay = np ? np : rp;
+
+    const db = getDatabase();
+    const auth = getAuth();
+
+    const addToCart = async () => {
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const cartRef = ref(db, `carts/${userId}`);
+            const newCartItemRef = push(cartRef);
+            await set(newCartItemRef, {
+                id: dataToDisplay.id,
+                name: dataToDisplay.name,
+                price: dataToDisplay.price,
+                image: dataToDisplay.img[0],
+                quantity: 1,
+            });
+            console.log('Item added to cart');
+        } else {
+            console.log('User not authenticated');
+        }
+    };
 
     return (
       <CommonLayout title={dataToDisplay ? dataToDisplay.name : 'Detail'}>
@@ -149,7 +172,9 @@ export default function DetailFreshFruitRating({ route }) {
                     <TouchableOpacity style={{borderColor:'#FF6026', borderWidth:1, borderRadius:5, padding:10}}>
                     <Image source={require('../assets/Shopping cart.png')} style={{width:30, height:30}}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{backgroundColor:'#FF6026', flex:1, borderRadius:10, marginLeft:10, alignItems:'center', justifyContent:'center'}}>
+                    <TouchableOpacity
+                        onPress={() => addToCart(dataToDisplay)}
+                        style={{backgroundColor:'#FF6026', flex:1, borderRadius:10, marginLeft:10, alignItems:'center', justifyContent:'center'}}>
                         <Text style={{color:'#FFFFFF', fontWeight:400, fontSize:18}}>Buy Now</Text>
                     </TouchableOpacity>
                 </View>

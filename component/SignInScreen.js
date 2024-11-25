@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-import { firebaseApp } from '../component/FirebaseConfig';
+import { firebaseApp } from '../utils/FirebaseConfig';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export default function SignInScreen({ navigation }) {
@@ -81,7 +81,7 @@ export default function SignInScreen({ navigation }) {
                 placeholder='Email'
                 value={email}
                 onChangeText={setEmail}
-                left={<TextInput.Icon icon="email" size={30}/>}
+                left={<TextInput.Icon icon="email" size={30} tabIndex={-1}/>}
                 style={{borderWidth: 1, borderRadius: 5, width: '90%'}}
             />
             <TextInput style={{borderWidth: 1, marginTop: 10, borderRadius: 5, width: '90%'}} placeholder='Password'
@@ -91,8 +91,9 @@ export default function SignInScreen({ navigation }) {
                        left={
                            <TextInput.Icon
                                icon="lock" size={30}
+                               tabIndex={-1}
                            />
-                       }
+                        }
                        right={
                            <TextInput.Icon icon={showPassword ? "eye-off" : "eye"}
                                            size={30}
