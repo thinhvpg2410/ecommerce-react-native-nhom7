@@ -17,8 +17,12 @@ export default function HomeScreen({navigation}) {
         <TouchableOpacity style={styles.categoryItem} onPress={() => handleCategories(item)}>
             <Icon name={item.icon} size={wp('10%')} color="#555"/>
             <Text style={styles.categoryText}>{item.name}</Text>
+            <TouchableOpacity>
+            </TouchableOpacity>
         </TouchableOpacity>
     )
+
+    
 
     const renderRcmProducts = ({item}) => (
         <TouchableOpacity style={styles.productItem}>
@@ -56,6 +60,16 @@ export default function HomeScreen({navigation}) {
                         keyExtractor={(item) => item.id}
                         showsHorizontalScrollIndicator={false}
                     />
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                    <TouchableOpacity on onPress={()=>navigation.navigate("FreshFruit")}>
+                        <Image source={require('../assets/Avocado.png')} style={{width: 50, height: 50}}/>
+                        <Text> Fresh Fruit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity on onPress={()=>navigation.navigate("FashionScreen")}>
+                        <Image source={require('../assets/doraemon2.png')} style={{width: 50, height: 50}}/>
+                        <Text> Fashion</Text>
+                    </TouchableOpacity>
+                    </View>
                 </View>
 
                 <View style={{padding: 10}}>
