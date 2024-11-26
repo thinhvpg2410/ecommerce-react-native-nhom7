@@ -58,7 +58,6 @@ const CheckoutScreen = ({navigation}) => {
             remove(itemRef)
                 .then(() => {
                     console.log('Item deleted from database');
-                    // Update local state only after successful deletion from the database
                     setCartItems(cartItems.filter(item => item.id !== id));
                 })
                 .catch((error) => {

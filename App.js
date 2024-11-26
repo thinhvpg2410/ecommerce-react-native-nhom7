@@ -12,7 +12,7 @@ import DetailFreshFruitRating from './component/DetailFreshFruitRating';
 import FashionScreen  from './component/FashionScreen';
 import DetailFashionScreen from './component/DetailFashionScreen';
 import CommonLayout from './component/CommonLayout';
-import { UserProvider } from './component/UserContext';
+import { UserProvider } from './context/UserContext';
 const Stack = createStackNavigator();
 
 export default function App() {
