@@ -167,7 +167,8 @@ const CheckoutScreen = ({navigation}) => {
             </View>
 
             <TouchableOpacity style={styles.nextButton}
-                              onPress={() => navigation.navigate('PaymentMethod', {totalAmount: calculateTotal()})}>
+                              onPress={() => navigation.navigate('PaymentMethodSelectScreen', { totalAmount: calculateTotal() })}
+            >
                 <Text style={styles.nextButtonText}>Next →</Text>
             </TouchableOpacity>
         </View>

@@ -12,6 +12,8 @@ import DetailFreshFruitRating from './component/DetailFreshFruitRating';
 import FashionScreen  from './component/FashionScreen';
 import DetailFashionScreen from './component/DetailFashionScreen';
 import {UserProvider, useUser} from './context/UserContext';
+import PaymentSuccessScreen from "./component/PaymentSuccessScreen";
+import PaymentMethodSelectScreen from "./component/PaymentMethodSelectScreen";
 const Stack = createStackNavigator();
 
 function AppNavigator() {
@@ -40,10 +42,12 @@ function AppNavigator() {
             <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FreshFruit" component={FreshFruitDetail} options={{ headerShown: false }} />
-            <Stack.Screen name="Cart" component={CheckoutScreen} options={{ headerShown: false }} />
             <Stack.Screen name="DetailFreshFruit" component={DetailFreshFruitRating} options={{ headerShown: false }} />
             <Stack.Screen name="FashionScreen" component={FashionScreen} options={{ headerShown: false }} />
             <Stack.Screen name="DetailFashion" component={DetailFashionScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Cart" component={CheckoutScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="PaymentMethodSelectScreen" component={PaymentMethodSelectScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="PaymentSuccessScreen" component={PaymentSuccessScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }
