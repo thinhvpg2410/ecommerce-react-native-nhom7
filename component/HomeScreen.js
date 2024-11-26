@@ -35,6 +35,7 @@ export default function HomeScreen({navigation}) {
 
     const handleCategories = (item) => {
         console.log(`${item.name}`)
+        navigation.navigate(item.nav)
     }
     const handleRcmProduct = (item) => {
         console.log()
@@ -60,16 +61,7 @@ export default function HomeScreen({navigation}) {
                         keyExtractor={(item) => item.id}
                         showsHorizontalScrollIndicator={false}
                     />
-                    <View style={{flexDirection:'row', alignItems:'center'}}>
-                    <TouchableOpacity on onPress={()=>navigation.navigate("FreshFruit")}>
-                        <Image source={require('../assets/Avocado.png')} style={{width: 50, height: 50}}/>
-                        <Text> Fresh Fruit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity on onPress={()=>navigation.navigate("FashionScreen")}>
-                        <Image source={require('../assets/doraemon2.png')} style={{width: 50, height: 50}}/>
-                        <Text> Fashion</Text>
-                    </TouchableOpacity>
-                    </View>
+
                 </View>
 
                 <View style={{padding: 10}}>
