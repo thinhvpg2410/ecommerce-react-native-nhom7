@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-paper';
 import { firebaseApp } from '../utils/FirebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; 
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
-import { useUser } from './UserContext';
+import { useUser } from '../context/UserContext';
 
 export default function SignUpScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);

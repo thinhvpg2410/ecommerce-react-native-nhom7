@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, TouchableHighlightBase } from 'react-native';
 import CommonLayout from './CommonLayout';
 import { TouchableHighlight } from 'react-native';
+import {getDatabase, push, ref, set} from "firebase/database";
+import {getAuth} from "firebase/auth";
+
 
 export default function DetailFashionScreen({ navigation, route }) {
   const { it } = route.params;
@@ -15,6 +18,30 @@ export default function DetailFashionScreen({ navigation, route }) {
     setMainImage(color.images[0]);
   };
   const total= parseFloat(it.price) *parseInt(quantity);
+
+    const db = getDatabase();
+    const auth = getAuth();
+
+    const addToCart = async () => {
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const cartRef = ref(db, `carts/${userId}`);
+            const newCartItemRef = push(cartRef);
+            await set(newCartItemRef, {
+                id: it.id,
+                name: it.name,
+                price: it.price,
+                image: mainImage,
+                quantity: 1,
+                type: selectedSize,
+                color: selectedColor.color,
+            });
+            console.log('Item added to cart');
+        } else {
+            console.log('User not authenticated');
+        }
+    };
 
   return (
     <CommonLayout title={it.name}>
@@ -75,10 +102,13 @@ export default function DetailFashionScreen({ navigation, route }) {
               <Text style={styles.quantityButton}>+</Text>
             </TouchableHighlight>
           </View>
-          <View style={[styles.quantityButton,{fontSize:20}]}>Total:{total}</View>
+          <Text style={[styles.quantityButton,{fontSize:20}]}>Total: ${total}</Text>
 </View>
 
-          <TouchableOpacity style={styles.addToCartButton}>
+          <TouchableOpacity
+              onPress={() => addToCart(it)}
+              style={styles.addToCartButton}
+          >
             <Text style={styles.addToCartText}>Add to cart</Text>
           </TouchableOpacity>
           <View style={{marginBottom:'-700%'}}></View>
@@ -110,7 +140,7 @@ const styles = StyleSheet.create({
     fontWeight: '#41B029',
     backgroundColor: '#E7FEE7',
     padding: 8, 
-    width:'35%',
+    // width:'35%',
     borderRadius: 50,
     textAlign: 'center',
     width:'auto',

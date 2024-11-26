@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react
 import CommonLayout from './CommonLayout';
 import { Picker } from '@react-native-picker/picker';
 import { getDatabase, ref, get } from 'firebase/database'; 
-import { firebaseApp } from './FirebaseConfig'; 
+import { firebaseApp } from '../utils/FirebaseConfig';
 
 export default function FashionScreen({ navigation, route }) {
   const [data, setData] = useState([]); 

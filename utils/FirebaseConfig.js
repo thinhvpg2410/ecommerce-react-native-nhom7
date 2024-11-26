@@ -1,11 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get, child } from 'firebase/database'; 
-import { getFirestore } from 'firebase/firestore'; 
+import { getFirestore } from 'firebase/firestore';
+import {FIREBASE_API_KEY} from '@env';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCJgRHLxJPi_eXa8sRPa48j6RIpgxvwERo",
+  apiKey: FIREBASE_API_KEY,
   authDomain: "ecommerce-1d0da.firebaseapp.com",
   databaseURL: "https://ecommerce-1d0da-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "ecommerce-1d0da",
