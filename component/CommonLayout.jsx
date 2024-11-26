@@ -10,26 +10,17 @@ import { getAuth, signOut } from 'firebase/auth';
 const CommonLayout = ({ title, children }) => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { userName } = useUser();  // Get user name from context
+    const { userName } = useUser();
     const [menuVisible, setMenuVisible] = useState(false);
     const auth = getAuth();
 
-    const isInitialScreen = navigation.getState().routes[0].name === route.name;
+    const isInitialScreen = route.name === navigation.getState().routes[0].name;
     const isHomeScreen = route.name === 'Home';
 
-    const handleCartPress = () => {
-        navigation.navigate('Cart');
-    };
-
-    const openMenu = () => setMenuVisible(true);
-    const closeMenu = () => setMenuVisible(false);
-
-    const handleProfilePress = () => {
-    };
-
-    const handleNavigateToProfile = () => {
-        closeMenu();
-        navigation.navigate('Profile');
+    const handleBackPress = () => {
+        if (!isInitialScreen && !isHomeScreen) {
+            navigation.goBack();
+        }
     };
 
     const handleLogout = () => {
@@ -44,26 +35,33 @@ const CommonLayout = ({ title, children }) => {
             });
     };
 
+    const openMenu = () => setMenuVisible(true);
+    const closeMenu = () => setMenuVisible(false);
+
+    const handleNavigateToProfile = () => {
+        closeMenu();
+        navigation.navigate('Profile');
+    };
+
     return (
         <Provider>
             <View style={styles.container}>
-                {/* Header */}
                 <View style={styles.header}>
-                    {!isInitialScreen && !isHomeScreen &&(
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                    {(!isInitialScreen && !isHomeScreen) && (
+                        <TouchableOpacity onPress={handleBackPress}>
                             <Icon name="arrow-back" size={24} color="black" />
                         </TouchableOpacity>
                     )}
                     <Text style={styles.title}>{title}</Text>
                     <View style={styles.headerRight}>
-                        <TouchableOpacity onPress={handleCartPress}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                             <Icon name='cart-outline' size={24} />
                         </TouchableOpacity>
                         <Menu
                             visible={menuVisible}
                             onDismiss={closeMenu}
                             anchor={
-                                <TouchableOpacity onPress={handleProfilePress} style={styles.avatarContainer}>
+                                <TouchableOpacity onPress={openMenu} style={styles.avatarContainer}>
                                     <Image source={require('../assets/Rectangle.png')} style={styles.avatar} />
                                     {userName && (
                                         <Text style={styles.welcomeText}>{userName}</Text>
@@ -83,21 +81,20 @@ const CommonLayout = ({ title, children }) => {
 
                 {/* Footer / Bottom Navigation */}
                 <View style={styles.bottomNav}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                        <Icon name="home" size={wp('6%')} color="#000" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-                        <Icon name="search" size={wp('6%')} color="#aaa" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
-                        <Icon name="heart" size={wp('6%')} color="#aaa" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Messages')}>
-                        <Icon name="mail" size={wp('6%')} color="#aaa" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                        <Icon name="person" size={wp('6%')} color="#aaa" />
-                    </TouchableOpacity>
+                    {[
+                        { name: 'Home', icon: 'home', color: '#000' },
+                        { name: 'Search', icon: 'search', color: '#aaa' },
+                        { name: 'Favorites', icon: 'heart', color: '#aaa' },
+                        { name: 'Messages', icon: 'mail', color: '#aaa' },
+                        { name: 'Profile', icon: 'person', color: '#aaa' },
+                    ].map((item) => (
+                        <TouchableOpacity
+                            key={item.name}
+                            onPress={() => navigation.navigate(item.name)}
+                        >
+                            <Icon name={item.icon} size={wp('6%')} color={item.color} />
+                        </TouchableOpacity>
+                    ))}
                 </View>
             </View>
         </Provider>
@@ -146,7 +143,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         borderRadius: 15,
-        backgroundColor: 'pink',
+        resizeMode: 'contain',
     },
     content: {
         flex: 2,
