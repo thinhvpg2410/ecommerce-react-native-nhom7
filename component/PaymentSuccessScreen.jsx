@@ -1,9 +1,61 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, Alert} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
+import { getFirestore, doc, setDoc, collection, addDoc } from 'firebase/firestore';
+import {getDatabase, onValue, ref, set} from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+import firebaseApp from '../utils/FirebaseConfig';
+
 
 const PaymentSuccessScreen = ({navigation, route}) => {
-    const {subtotal, tax, fees, totalAmount, cardType, cardNumber} = route.params;
+    const { subtotal, tax, fees, totalAmount, cardType, cardNumber } = route.params;
+    const auth = getAuth(firebaseApp);
+    const db = getFirestore(firebaseApp);
+    const realTimeDb = getDatabase(firebaseApp);
+    const user = auth.currentUser;
+
+    useEffect(() => {
+        const saveOrderAndClearCart = async () => {
+            if (user) {
+                const userId = user.uid;
+                const userCartRef = ref(realTimeDb, `carts/${userId}`);
+                onValue(userCartRef, async (snapshot) => {
+                    const cartData = snapshot.val();
+                    if (cartData) {
+                        const items = Object.keys(cartData).map((key) => ({
+                            id: key,
+                            ...cartData[key],
+                        }));
+                        try {
+                            const ordersCollectionRef = collection(db, 'orders');
+                            await addDoc(ordersCollectionRef, {
+                                userId: userId,
+                                subtotal: subtotal,
+                                tax: tax,
+                                fees: fees,
+                                totalAmount: totalAmount,
+                                cardType: cardType,
+                                cardNumber: `**** ${cardNumber.slice(-4)}`,
+                                items: items,
+                                createdAt: new Date().toISOString(),
+                            });
+
+                            // Clear the user's cart in Realtime Database
+                            await set(userCartRef, null);
+
+                            console.log('Order saved and cart cleared successfully.');
+                        } catch (error) {
+                            console.error('Error saving order or clearing cart:', error);
+                            Alert.alert('Error', 'Failed to save order or clear cart. Please try again.');
+                        }
+                    }
+                });
+            }
+        };
+
+        saveOrderAndClearCart();
+    }, []);
+
     const handleBackToHome = () => {
         navigation.navigate('Home');
     };
