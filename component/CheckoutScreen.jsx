@@ -1,64 +1,67 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet} from 'react-native';
-import Icon from "react-native-vector-icons/Ionicons";
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {getDatabase, ref, onValue, update, remove} from "firebase/database";
-import {getAuth} from "firebase/auth";
-import { firebaseApp } from '../utils/FirebaseConfig';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { getDatabase, ref, onValue, update, remove } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+import firebaseApp from '../utils/FirebaseConfig';
 
-
-const CheckoutScreen = ({navigation}) => {
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [voucher, setVoucher] = useState('')
+const CheckoutScreen = ({ navigation }) => {
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [voucher, setVoucher] = useState('');
     const [cartItems, setCartItems] = useState([]);
     const db = getDatabase(firebaseApp);
     const auth = getAuth(firebaseApp);
-    const handleIncreaseQuantity = (id) => {
+
+    const handleIncreaseQuantity = (uniqueId) => {
         const user = auth.currentUser;
         if (user) {
             const userId = user.uid;
-            const itemRef = ref(db, `carts/${userId}/${id}`);
-            setCartItems(cartItems.map(item => {
-                if (item.id === id) {
-                    const updatedQuantity = item.quantity + 1;
-                    update(itemRef, { quantity: updatedQuantity });
-                    return { ...item, quantity: updatedQuantity };
-                }
-                return item;
-            }));
+            const itemRef = ref(db, `carts/${userId}/${uniqueId}`);
+            setCartItems((prevItems) =>
+                prevItems.map((item) => {
+                    if (item.uniqueId === uniqueId) {
+                        const updatedQuantity = item.quantity + 1;
+                        update(itemRef, { quantity: updatedQuantity });
+                        return { ...item, quantity: updatedQuantity };
+                    }
+                    return item;
+                })
+            );
         }
     };
 
-    const handleDecreaseQuantity = (id) => {
+    const handleDecreaseQuantity = (uniqueId) => {
         const user = auth.currentUser;
         if (user) {
             const userId = user.uid;
-            const itemRef = ref(db, `carts/${userId}/${id}`);
-            setCartItems(cartItems.map(item => {
-                if (item.id === id && item.quantity > 1) {
-                    const updatedQuantity = item.quantity - 1;
-                    update(itemRef, { quantity: updatedQuantity });
-                    return { ...item, quantity: updatedQuantity };
-                }
-                return item;
-            }));
+            const itemRef = ref(db, `carts/${userId}/${uniqueId}`);
+            setCartItems((prevItems) =>
+                prevItems.map((item) => {
+                    if (item.uniqueId === uniqueId && item.quantity > 1) {
+                        const updatedQuantity = item.quantity - 1;
+                        update(itemRef, { quantity: updatedQuantity });
+                        return { ...item, quantity: updatedQuantity };
+                    }
+                    return item;
+                })
+            );
         }
     };
 
     const toggleEditMode = () => {
-        setIsEditMode(!isEditMode);
+        setIsEditMode((prevMode) => !prevMode);
     };
 
-    const handleDeleteItem = (id) => {
+    const handleDeleteItem = (uniqueId) => {
         const user = auth.currentUser;
         if (user) {
             const userId = user.uid;
-            const itemRef = ref(db, `carts/${userId}/${id}`);
+            const itemRef = ref(db, `carts/${userId}/${uniqueId}`);
 
             remove(itemRef)
                 .then(() => {
-                    console.log('Item deleted from database');
-                    setCartItems(cartItems.filter(item => item.id !== id));
+                    setCartItems((prevItems) => prevItems.filter((item) => item.uniqueId !== uniqueId));
                 })
                 .catch((error) => {
                     console.error('Error deleting item from database:', error);
@@ -67,7 +70,6 @@ const CheckoutScreen = ({navigation}) => {
             console.error('User not authenticated');
         }
     };
-
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -83,7 +85,7 @@ const CheckoutScreen = ({navigation}) => {
                 const data = snapshot.val();
                 if (data) {
                     const items = Object.keys(data).map((key) => ({
-                        id: key,
+                        uniqueId: key,
                         ...data[key],
                     }));
                     setCartItems(items);
@@ -94,9 +96,9 @@ const CheckoutScreen = ({navigation}) => {
         }
     }, []);
 
-    const renderCartItem = ({item}) => (
+    const renderCartItem = ({ item }) => (
         <View style={styles.cartItem}>
-            <Image source={{uri: item.image}} style={styles.itemImage}/>
+            <Image source={{ uri: item.image }} style={styles.itemImage} />
             <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemDescription}>{item.description}</Text>
@@ -105,26 +107,26 @@ const CheckoutScreen = ({navigation}) => {
                 <Text style={styles.itemPrice}>{item.color}</Text>
             </View>
             <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={() => handleDecreaseQuantity(item.id)} style={styles.quantityButton}>
+                <TouchableOpacity onPress={() => handleDecreaseQuantity(item.uniqueId)} style={styles.quantityButton}>
                     <Text style={styles.quantityButtonText}>-</Text>
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{item.quantity}</Text>
-                <TouchableOpacity onPress={() => handleIncreaseQuantity(item.id)} style={styles.quantityButton}>
+                <TouchableOpacity onPress={() => handleIncreaseQuantity(item.uniqueId)} style={styles.quantityButton}>
                     <Text style={styles.quantityButtonText}>+</Text>
                 </TouchableOpacity>
             </View>
             {isEditMode ? (
-                <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteItem(item.id)}>
-                    <Icon name="trash" size={wp('1%')}/>
-                    {/*<Text style={styles.deleteButtonText}>Delete</Text>*/}
+                <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteItem(item.uniqueId)}>
+                    <Icon name="trash" size={wp('5%')} />
                 </TouchableOpacity>
             ) : (
                 <TouchableOpacity style={styles.editButton} onPress={toggleEditMode}>
-                    <Icon name="pencil" size={wp('1%')}/>
+                    <Icon name="pencil" size={wp('5%')} />
                 </TouchableOpacity>
             )}
         </View>
     );
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Checkout</Text>
@@ -145,7 +147,7 @@ const CheckoutScreen = ({navigation}) => {
                 <FlatList
                     data={cartItems}
                     renderItem={renderCartItem}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.uniqueId}
                     contentContainerStyle={styles.listContainer}
                 />
             )}
@@ -166,8 +168,9 @@ const CheckoutScreen = ({navigation}) => {
                 <Text style={styles.totalAmount}>${calculateTotal()}</Text>
             </View>
 
-            <TouchableOpacity style={styles.nextButton}
-                              onPress={() => navigation.navigate('PaymentMethodSelectScreen', { totalAmount: calculateTotal() })}
+            <TouchableOpacity
+                style={styles.nextButton}
+                onPress={() => navigation.navigate('PaymentMethodSelectScreen', { totalAmount: calculateTotal() })}
             >
                 <Text style={styles.nextButtonText}>Next →</Text>
             </TouchableOpacity>
@@ -192,9 +195,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 16,
-    },
-    cartList: {
-        flexGrow: 0,
     },
     cartItem: {
         flexDirection: 'row',
@@ -224,9 +224,33 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#333',
     },
-    itemQuantity: {
+    quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 1,
+        marginRight: 8,
+    },
+    quantityButton: {
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#ddd',
+        borderRadius: 4,
+    },
+    quantityButtonText: {
+        fontSize: 18,
+        color: '#333',
+    },
+    quantityText: {
         fontSize: 16,
-        marginHorizontal: 10,
+        marginHorizontal: 12,
+    },
+    deleteButton: {
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        backgroundColor: '#ff4d4d',
+        borderRadius: 4,
     },
     editButton: {
         paddingHorizontal: 8,
@@ -270,44 +294,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    quantityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 1,
-        marginRight: 8
-    },
-    quantityButton: {
-        width: 30,
-        height: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#ddd',
-        borderRadius: 4,
-    },
-    quantityButtonText: {
-        fontSize: 18,
-        color: '#333',
-    },
-    quantityText: {
-        fontSize: 16,
-        marginHorizontal: 12,
-    },
-    deleteButton: {
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        backgroundColor: '#ff4d4d',
-        borderRadius: 4,
-    },
-    deleteButtonText: {
-        color: '#fff',
-    },
-    editModeButton: {
-        marginTop: 16,
-        padding: 12,
-        alignItems: 'center',
-        backgroundColor: '#ffa500',
-        borderRadius: 8,
-    },
     totalAmount: {
         fontSize: 18,
         fontWeight: 'bold',
@@ -349,4 +335,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
+
 export default CheckoutScreen;
