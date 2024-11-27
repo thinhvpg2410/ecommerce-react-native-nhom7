@@ -5,7 +5,7 @@ import {FontAwesome} from '@expo/vector-icons';
 const PaymentSuccessScreen = ({navigation, route}) => {
     const {subtotal, tax, fees, totalAmount, cardType, cardNumber} = route.params;
     const handleBackToHome = () => {
-        navigation.navigate('CheckoutScreen');
+        navigation.navigate('Home');
     };
 
     return (
@@ -14,7 +14,7 @@ const PaymentSuccessScreen = ({navigation, route}) => {
                 <FontAwesome name="check-circle" size={80} color="#28a745"/>
             </View>
             <Text style={styles.successMessage}>Order placed successfully!</Text>
-            <Text style={styles.subMessage}>Commodo eu ut sunt qui minim fugiat elit nisi enim</Text>
+            <Text style={styles.subMessage}>Thanks for purchasing</Text>
 
             <View style={styles.summaryBox}>
                 <View style={styles.summaryRow}>
