@@ -35,7 +35,7 @@ export default function DetailFreshFruitRating({ route }) {
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>{dataToDisplay?.price}</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>${dataToDisplay?.price}</Text>
           <View style={{flexDirection:'row'}}>
             <Image source={require('../assets/star.png')}/>
             <View style={{flexDirection:'row'}}>
