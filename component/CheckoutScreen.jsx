@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { getDatabase, ref, onValue, update, remove } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {getDatabase, ref, onValue, update, remove} from 'firebase/database';
+import {getAuth} from 'firebase/auth';
 import firebaseApp from '../utils/FirebaseConfig';
 
-const CheckoutScreen = ({ navigation }) => {
+
+const CheckoutScreen = ({navigation}) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [voucher, setVoucher] = useState('');
     const [cartItems, setCartItems] = useState([]);
     const db = getDatabase(firebaseApp);
     const auth = getAuth(firebaseApp);
+
+    const handleBackPress = () => {
+        navigation.goBack()
+    };
 
     const handleIncreaseQuantity = (uniqueId) => {
         const user = auth.currentUser;
@@ -22,8 +27,8 @@ const CheckoutScreen = ({ navigation }) => {
                 prevItems.map((item) => {
                     if (item.uniqueId === uniqueId) {
                         const updatedQuantity = item.quantity + 1;
-                        update(itemRef, { quantity: updatedQuantity });
-                        return { ...item, quantity: updatedQuantity };
+                        update(itemRef, {quantity: updatedQuantity});
+                        return {...item, quantity: updatedQuantity};
                     }
                     return item;
                 })
@@ -40,8 +45,8 @@ const CheckoutScreen = ({ navigation }) => {
                 prevItems.map((item) => {
                     if (item.uniqueId === uniqueId && item.quantity > 1) {
                         const updatedQuantity = item.quantity - 1;
-                        update(itemRef, { quantity: updatedQuantity });
-                        return { ...item, quantity: updatedQuantity };
+                        update(itemRef, {quantity: updatedQuantity});
+                        return {...item, quantity: updatedQuantity};
                     }
                     return item;
                 })
@@ -96,15 +101,15 @@ const CheckoutScreen = ({ navigation }) => {
         }
     }, []);
 
-    const renderCartItem = ({ item }) => (
+    const renderCartItem = ({item}) => (
         <View style={styles.cartItem}>
-            <Image source={{ uri: item.image }} style={styles.itemImage} />
+            <Image source={{uri: item.image}} style={styles.itemImage}/>
             <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemDescription}>{item.description}</Text>
                 <Text style={styles.itemPrice}>${item.price}</Text>
                 <Text style={styles.itemPrice}>{item.type}</Text>
-                <Text style={styles.itemPrice}>{item.color}</Text>
+                {/*<Text style={styles.itemPrice}>{item.color}</Text>*/}
             </View>
             <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={() => handleDecreaseQuantity(item.uniqueId)} style={styles.quantityButton}>
@@ -117,11 +122,11 @@ const CheckoutScreen = ({ navigation }) => {
             </View>
             {isEditMode ? (
                 <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteItem(item.uniqueId)}>
-                    <Icon name="trash" size={wp('5%')} />
+                    <Icon name="trash" size={wp('5%')}/>
                 </TouchableOpacity>
             ) : (
                 <TouchableOpacity style={styles.editButton} onPress={toggleEditMode}>
-                    <Icon name="pencil" size={wp('5%')} />
+                    <Icon name="pencil" size={wp('5%')}/>
                 </TouchableOpacity>
             )}
         </View>
@@ -129,6 +134,9 @@ const CheckoutScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity onPress={handleBackPress}>
+                <Icon name="arrow-back" size={24} color="black"/>
+            </TouchableOpacity>
             <Text style={styles.title}>Checkout</Text>
             <View style={styles.header}>
                 <Text style={styles.title}></Text>
@@ -144,36 +152,37 @@ const CheckoutScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             ) : (
-                <FlatList
-                    data={cartItems}
-                    renderItem={renderCartItem}
-                    keyExtractor={(item) => item.uniqueId}
-                    contentContainerStyle={styles.listContainer}
-                />
+                <>
+                    <FlatList
+                        data={cartItems}
+                        renderItem={renderCartItem}
+                        keyExtractor={(item) => item.uniqueId}
+                        contentContainerStyle={styles.listContainer}
+                    />
+                    <View style={styles.voucherContainer}>
+                        <TextInput
+                            style={styles.voucherInput}
+                            placeholder="Enter voucher code"
+                            value={voucher}
+                            onChangeText={setVoucher}
+                        />
+                        <TouchableOpacity style={styles.applyButton}>
+                            <Text style={styles.applyButtonText}>Apply</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.totalContainer}>
+                        <Text style={styles.totalLabel}>TOTAL</Text>
+                        <Text style={styles.totalAmount}>${calculateTotal()}</Text>
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.nextButton}
+                        onPress={() => navigation.navigate('PaymentMethodSelectScreen', {totalAmount: calculateTotal()})}
+                    >
+                        <Text style={styles.nextButtonText}>Next →</Text>
+                    </TouchableOpacity>
+                </>
             )}
-
-            <View style={styles.voucherContainer}>
-                <TextInput
-                    style={styles.voucherInput}
-                    placeholder="Enter voucher code"
-                    value={voucher}
-                    onChangeText={setVoucher}
-                />
-                <TouchableOpacity style={styles.applyButton}>
-                    <Text style={styles.applyButtonText}>Apply</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.totalContainer}>
-                <Text style={styles.totalLabel}>TOTAL</Text>
-                <Text style={styles.totalAmount}>${calculateTotal()}</Text>
-            </View>
-
-            <TouchableOpacity
-                style={styles.nextButton}
-                onPress={() => navigation.navigate('PaymentMethodSelectScreen', { totalAmount: calculateTotal() })}
-            >
-                <Text style={styles.nextButtonText}>Next →</Text>
-            </TouchableOpacity>
         </View>
     );
 };

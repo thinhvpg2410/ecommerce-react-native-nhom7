@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Alert, Modal, TextInput } from 'react-native';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { firebaseApp } from '../utils/FirebaseConfig';
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Alert, Modal, TextInput} from 'react-native';
+import {getAuth} from 'firebase/auth';
+import {getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion} from 'firebase/firestore';
+import firebaseApp from '../utils/FirebaseConfig';
+import Icon from "react-native-vector-icons/Ionicons";
 
-const PaymentMethodSelectScreen = ({ route, navigation }) => {
+const PaymentMethodSelectScreen = ({route, navigation}) => {
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
 
@@ -16,7 +17,7 @@ const PaymentMethodSelectScreen = ({ route, navigation }) => {
     const [newPayPalEmail, setNewPayPalEmail] = useState('');
     const [selectedPaymentType, setSelectedPaymentType] = useState(null);
     const [paymentMethods, setPaymentMethods] = useState([]);
-    const { totalAmount } = route.params;
+    const {totalAmount} = route.params;
 
     const visaLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png';
     const mastercardLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png';
@@ -177,7 +178,7 @@ const PaymentMethodSelectScreen = ({ route, navigation }) => {
             ]}
             onPress={() => setSelectedMethod(method)}
         >
-            <Image source={{ uri: method.image }} style={styles.methodImage} />
+            <Image source={{uri: method.image}} style={styles.methodImage}/>
             <View style={styles.methodDetails}>
                 <Text style={styles.methodName}>{method.type}</Text>
                 {method.type === 'PayPal' ? (
@@ -187,7 +188,7 @@ const PaymentMethodSelectScreen = ({ route, navigation }) => {
                 )}
             </View>
             <View style={styles.radioCircle}>
-                {selectedMethod?.id === method.id && <View style={styles.selectedRb} />}
+                {selectedMethod?.id === method.id && <View style={styles.selectedRb}/>}
             </View>
         </TouchableOpacity>
     );
@@ -253,8 +254,14 @@ const PaymentMethodSelectScreen = ({ route, navigation }) => {
         </View>
     );
 
+    const handleBackPress = () => {
+        navigation.goBack()
+    };
     return (
         <View style={styles.container}>
+            <TouchableOpacity onPress={handleBackPress}>
+                <Icon name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
             <Text style={styles.header}>Payment</Text>
             <Text style={styles.totalLabel}>TOTAL</Text>
             <Text style={styles.totalAmount}>${totalAmount}</Text>
