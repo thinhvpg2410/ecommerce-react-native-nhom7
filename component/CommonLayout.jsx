@@ -65,6 +65,10 @@ const CommonLayout = ({ title, children }) => {
         navigation.navigate('Profile');
     };
 
+    const getIconColor = (screenName) => {
+        return route.name === screenName ? '#000' : '#aaa';
+    };
+
     return (
         <Provider>
             <View style={styles.container}>
@@ -109,17 +113,17 @@ const CommonLayout = ({ title, children }) => {
                 {/* Footer / Bottom Navigation */}
                 <View style={styles.bottomNav}>
                     {[
-                        { name: 'Home', icon: 'home', color: '#000' },
-                        { name: 'Search', icon: 'search', color: '#aaa' },
-                        { name: 'Favorites', icon: 'heart', color: '#aaa' },
-                        { name: 'Messages', icon: 'mail', color: '#aaa' },
-                        { name: 'Profile', icon: 'person', color: '#aaa' },
+                        { name: 'Home', icon: 'home' },
+                        { name: 'Search', icon: 'search' },
+                        { name: 'Favorites', icon: 'heart' },
+                        { name: 'Messages', icon: 'mail' },
+                        { name: 'Profile', icon: 'person' },
                     ].map((item) => (
                         <TouchableOpacity
                             key={item.name}
                             onPress={() => navigation.navigate(item.name)}
                         >
-                            <Icon name={item.icon} size={wp('6%')} color={item.color} />
+                            <Icon name={item.icon} size={wp('6%')} color={getIconColor(item.name)} />
                         </TouchableOpacity>
                     ))}
                 </View>
