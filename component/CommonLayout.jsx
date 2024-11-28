@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -6,13 +6,35 @@ import { useUser } from '../context/UserContext';  // Import hook useUser
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Menu, Provider } from 'react-native-paper';
 import { getAuth, signOut } from 'firebase/auth';
+import {getDatabase, onValue, ref} from "firebase/database";
 
 const CommonLayout = ({ title, children }) => {
     const navigation = useNavigation();
     const route = useRoute();
     const { userName } = useUser();
     const [menuVisible, setMenuVisible] = useState(false);
+    const [cartItemCount, setCartItemCount] = useState(0);
+
     const auth = getAuth();
+
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (user) {
+            const userId = user.uid;
+            const db = getDatabase();
+            const cartRef = ref(db, `carts/${userId}`);
+
+            onValue(cartRef, (snapshot) => {
+                const cartData = snapshot.val();
+                if (cartData) {
+                    const count = Object.values(cartData).reduce((total, item) => total + item.quantity, 0);
+                    setCartItemCount(count);
+                } else {
+                    setCartItemCount(0);
+                }
+            });
+        }
+    }, []);
 
     const isInitialScreen = route.name === navigation.getState().routes[0].name;
     const isHomeScreen = route.name === 'Home';
@@ -54,8 +76,13 @@ const CommonLayout = ({ title, children }) => {
                     )}
                     <Text style={styles.title}>{title}</Text>
                     <View style={styles.headerRight}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={styles.cartContainer}>
                             <Icon name='cart-outline' size={24} />
+                            {cartItemCount > 0 && (
+                                <View style={styles.cartBadge}>
+                                    <Text style={styles.cartBadgeText}>{cartItemCount}</Text>
+                                </View>
+                            )}
                         </TouchableOpacity>
                         <Menu
                             visible={menuVisible}
@@ -156,6 +183,25 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: '#f0f0f0',
         backgroundColor: '#fff',
+    },
+    cartContainer: {
+        position: 'relative',
+    },
+    cartBadge: {
+        position: 'absolute',
+        right: -10,
+        top: -10,
+        backgroundColor: 'red',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cartBadgeText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
     },
 });
 
