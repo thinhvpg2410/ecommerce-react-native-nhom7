@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, TouchableHighlightBase } from 'react-native';
 import CommonLayout from './CommonLayout';
 import { TouchableHighlight } from 'react-native';
-import {getDatabase, push, ref, set} from "firebase/database";
+import {getDatabase, onValue, push, ref, set, update} from "firebase/database";
 import {getAuth} from "firebase/auth";
 
 
@@ -27,17 +27,40 @@ export default function DetailFashionScreen({ navigation, route }) {
         if (user) {
             const userId = user.uid;
             const cartRef = ref(db, `carts/${userId}`);
-            const newCartItemRef = push(cartRef);
-            await set(newCartItemRef, {
-                id: it.id,
-                name: it.name,
-                price: it.price,
-                image: mainImage,
-                quantity: 1,
-                type: selectedSize,
-                color: selectedColor.color,
+            const sanitizedColor = selectedColor.color.replace(/[^a-zA-Z0-9]/g, '')
+            const newItemId = `${it.id}-${sanitizedColor}-${selectedSize}`;
+
+            onValue(cartRef, (snapshot) => {
+                const data = snapshot.val();
+
+                if (data && data[newItemId]) {
+                    const updatedQuantity = data[newItemId].quantity + quantity;
+                    const itemRef = ref(db, `carts/${userId}/${newItemId}`);
+                    update(itemRef, {
+                        quantity: updatedQuantity,
+                    }).then(() => {
+                        console.log('Item quantity updated in the cart');
+                    }).catch((error) => {
+                        console.error('Error updating item quantity:', error);
+                    });
+                } else {
+                    set(ref(db, `carts/${userId}/${newItemId}`), {
+                        id: it.id,
+                        name: it.name,
+                        price: it.price,
+                        image: mainImage,
+                        quantity: quantity,
+                        type: selectedSize,
+                        color: selectedColor.color,
+                    }).then(() => {
+                        console.log('Item added to cart');
+                    }).catch((error) => {
+                        console.error('Error adding item to cart:', error);
+                    });
+                }
+            }, {
+                onlyOnce: true
             });
-            console.log('Item added to cart');
         } else {
             console.log('User not authenticated');
         }
