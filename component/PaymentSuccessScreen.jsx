@@ -13,6 +13,9 @@ const PaymentSuccessScreen = ({navigation, route}) => {
     const db = getFirestore(firebaseApp);
     const realTimeDb = getDatabase(firebaseApp);
     const user = auth.currentUser;
+     const formatCurrencyVND = (number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+      };
 
     useEffect(() => {
         const saveOrderAndClearCart = async () => {
@@ -71,15 +74,15 @@ const PaymentSuccessScreen = ({navigation, route}) => {
             <View style={styles.summaryBox}>
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>Subtotal</Text>
-                    <Text style={styles.summaryValue}>${subtotal}</Text>
+                    <Text style={styles.summaryValue}>{formatCurrencyVND(subtotal)}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>Tax (10%)</Text>
-                    <Text style={styles.summaryValue}>${tax}</Text>
+                    <Text style={styles.summaryValue}>{formatCurrencyVND(tax)}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>Fees</Text>
-                    <Text style={styles.summaryValue}>${fees}</Text>
+                    <Text style={styles.summaryValue}>{formatCurrencyVND(fees)}</Text>
                 </View>
                 <View style={styles.divider}/>
                 <View style={styles.summaryRow}>
@@ -88,7 +91,7 @@ const PaymentSuccessScreen = ({navigation, route}) => {
                 </View>
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>Total</Text>
-                    <Text style={styles.successValue}>${totalAmount}</Text>
+                    <Text style={styles.successValue}>{formatCurrencyVND(totalAmount)}</Text>
                 </View>
             </View>
 
