@@ -26,6 +26,9 @@ export default function FreshFruitDetail({navigation, route}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filteredProducts1, setFilteredProducts1] = useState([]);
+    const formatCurrencyVND = (number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+      };
     const toggleShowAll = () => {
         setShowAll(!showAll)
     }
@@ -209,7 +212,7 @@ export default function FreshFruitDetail({navigation, route}) {
                                                     }}>
                                                         <Image source={item.rating} style={{width: 80, height: 15}}/>
                                                         <Text
-                                                            style={{fontWeight: 700, fontSize: 15}}>${item.price}</Text>
+                                                            style={{fontWeight: 700, fontSize: 15}}>{formatCurrencyVND(item.price)}</Text>
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>
@@ -287,7 +290,7 @@ export default function FreshFruitDetail({navigation, route}) {
                                                     <TouchableOpacity>
                                                         <Image source={require('../assets/Button_Add.png')}/>
                                                     </TouchableOpacity>
-                                                    <Text style={{fontWeight: 600, fontSize: 16}}>${item.price}</Text>
+                                                    <Text style={{fontWeight: 600, fontSize: 16}}>{formatCurrencyVND(item.price)}</Text>
                                                 </View>
                                             </TouchableOpacity>
                                         )}
