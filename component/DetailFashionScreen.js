@@ -128,7 +128,7 @@ export default function DetailFashionScreen({ navigation, route }) {
               <Text style={styles.quantityButton}>+</Text>
             </TouchableHighlight>
           </View>
-          <Text style={[styles.quantityButton,{fontSize:20}]}>Total: ${total}</Text>
+          <Text style={[styles.quantityButton,{fontSize:20}]}>Total: {formatCurrencyVND(total)}</Text>
 </View>
 
           <TouchableOpacity
