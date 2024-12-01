@@ -90,6 +90,7 @@ export default function HomeScreen({navigation}) {
                         showsHorizontalScrollIndicator={false}
                     />
                 </View>
+                <View style={{marginBottom: '-500%'}}></View>
             </ScrollView>
 
         </CommonLayout>
