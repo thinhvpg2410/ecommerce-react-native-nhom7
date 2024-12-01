@@ -11,6 +11,9 @@ export default function DetailFreshFruitRating({route}) {
     const {np, rp} = route.params;
     // Kiểm tra nếu có dữ liệu np thì hiển thị np, nếu không có np thì hiển thị rp
     const dataToDisplay = np ? np : rp;
+    const formatCurrencyVND = (number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+      };
 
     const db = getDatabase();
     const auth = getAuth();
@@ -92,7 +95,7 @@ export default function DetailFreshFruitRating({route}) {
                     </View>
 
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{dataToDisplay?.price}</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold'}}> {dataToDisplay?.price !== undefined ? formatCurrencyVND(dataToDisplay.price) : 'Không có dữ liệu'}</Text>
                         <View style={{flexDirection: 'row'}}>
                             <Image source={require('../assets/star.png')}/>
                             <View style={{flexDirection: 'row'}}>
