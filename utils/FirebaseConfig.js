@@ -1,7 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get, child } from 'firebase/database'; 
-import { getFirestore } from 'firebase/firestore'; 
+import { getFirestore } from 'firebase/firestore';
+// import {FIREBASE_API_KEY} from '@env';
 
 
 const firebaseConfig = {
@@ -19,3 +20,4 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
 export const database = getDatabase(firebaseApp);
 export const db = getFirestore(firebaseApp);
+export default firebaseApp

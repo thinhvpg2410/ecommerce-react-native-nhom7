@@ -150,10 +150,10 @@ export const product = [
 ]
 
 export const categories = [
-    {id: 1, name: 'Electronics', icon: 'phone-portrait'},
-    {id: 2, name: 'Fashion', icon: 'shirt'},
-    {id: 3, name: 'Beauty', icon: 'heart'},
-    {id: 4, name: 'Fresh Fruit', icon: 'leaf'},
+    {id: 1, name: 'Electronics', icon: 'phone-portrait', nav:'Home'},
+    {id: 2, name: 'Fashion', icon: 'shirt', nav:'FashionScreen'},
+    {id: 3, name: 'Beauty', icon: 'heart', nav:'Home'},
+    {id: 4, name: 'Fresh Fruit', icon: 'leaf', nav:'FreshFruit'},
 ]
 export const user = [
     {}

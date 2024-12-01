@@ -1,10 +1,10 @@
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
 import { TextInput } from 'react-native-paper';
-import { firebaseApp } from '../component/FirebaseConfig'; 
+import { firebaseApp } from '../utils/FirebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'; 
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
-import { useUser } from './UserContext';
+import { useUser } from '../context/UserContext';
 
 export default function SignUpScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
