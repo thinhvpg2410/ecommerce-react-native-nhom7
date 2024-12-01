@@ -14,6 +14,7 @@ import DetailFashionScreen from './component/DetailFashionScreen';
 import {UserProvider, useUser} from './context/UserContext';
 import PaymentSuccessScreen from "./component/PaymentSuccessScreen";
 import PaymentMethodSelectScreen from "./component/PaymentMethodSelectScreen";
+import SearchScreen from "./component/SearchScreen";
 const Stack = createStackNavigator();
 
 function AppNavigator() {
@@ -41,6 +42,7 @@ function AppNavigator() {
             <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FreshFruit" component={FreshFruitDetail} options={{ headerShown: false }} />
             <Stack.Screen name="DetailFreshFruit" component={DetailFreshFruitRating} options={{ headerShown: false }} />
             <Stack.Screen name="FashionScreen" component={FashionScreen} options={{ headerShown: false }} />
