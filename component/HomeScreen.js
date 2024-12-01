@@ -49,7 +49,7 @@ export default function HomeScreen({navigation}) {
                         style={styles.searchInput}
                         placeholder="Search for product"
                         placeholderTextColor="#aaa"
-
+                        onFocus={() => navigation.navigate('Search')}
                     />
                 </View>
 

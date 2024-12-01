@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, FlatList} from 'react-native';
-import {getDatabase, ref, push, set} from 'firebase/database';
+import {getDatabase, ref, push, set, onValue, update} from 'firebase/database';
 import {getAuth} from 'firebase/auth';
 import CommonLayout from './CommonLayout';
 import "@expo/metro-runtime";
@@ -19,20 +19,31 @@ export default function DetailFreshFruitRating({route}) {
         const user = auth.currentUser;
         if (user) {
             const userId = user.uid;
-            const cartRef = ref(db, `carts/${userId}`);
-            const newCartItemRef = push(cartRef);
-            await set(newCartItemRef, {
-                id: dataToDisplay.id,
-                name: dataToDisplay.name,
-                price: dataToDisplay.price,
-                image: dataToDisplay.img[0],
-                quantity: 1,
+            const cartItemRef = ref(db, `carts/${userId}/${dataToDisplay.id}`);
+
+            onValue(cartItemRef, async (snapshot) => {
+                if (snapshot.exists()) {
+                    const existingQuantity = snapshot.val().quantity;
+                    await update(cartItemRef, { quantity: existingQuantity + 1 });
+                } else {
+                    await set(cartItemRef, {
+                        id: dataToDisplay.id,
+                        name: dataToDisplay.name,
+                        price: dataToDisplay.price,
+                        image: dataToDisplay.img[0],
+                        quantity: 1,
+                    });
+                }
+            }, {
+                onlyOnce: true
             });
+
             console.log('Item added to cart');
         } else {
             console.log('User not authenticated');
         }
     };
+
 
     return (
         <CommonLayout title={dataToDisplay ? dataToDisplay.name : 'Detail'}>
