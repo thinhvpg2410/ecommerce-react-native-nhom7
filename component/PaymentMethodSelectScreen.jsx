@@ -18,6 +18,9 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
     const [selectedPaymentType, setSelectedPaymentType] = useState(null);
     const [paymentMethods, setPaymentMethods] = useState([]);
     const {totalAmount} = route.params;
+    const formatCurrencyVND = (number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+      };
 
     const visaLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png';
     const mastercardLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png';
@@ -47,7 +50,7 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
             Alert.alert('Please select a payment method');
             return;
         }
-        Alert.alert('Payment Successful', `You have paid $${totalAmount} using ${selectedMethod.type}`);
+        Alert.alert('Payment Successful', `You have paid ${formatCurrencyVND(totalAmount)} using ${selectedMethod.type}`);
         navigation.navigate('PaymentSuccessScreen', {
             subtotal: totalAmount,
             tax: 0,
@@ -264,7 +267,7 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
             </TouchableOpacity>
             <Text style={styles.header}>Payment</Text>
             <Text style={styles.totalLabel}>TOTAL</Text>
-            <Text style={styles.totalAmount}>${totalAmount}</Text>
+            <Text style={styles.totalAmount}>{formatCurrencyVND(totalAmount)}</Text>
 
             {paymentMethods.map(renderPaymentMethod)}
 
