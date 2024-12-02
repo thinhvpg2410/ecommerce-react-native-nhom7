@@ -1,16 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity, ScrollView, TextInput} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import CommonLayout from "./CommonLayout";
-import {getDatabase, ref, onValue} from 'firebase/database';
+import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseApp from '../utils/FirebaseConfig';
 
-export default function SearchScreen({navigation}) {
+export default function SearchScreen({ navigation }) {
     const [searchText, setSearchText] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
-    const [cartCount, setCartCount] = useState(0);
 
     const db = getDatabase(firebaseApp);
 
@@ -28,6 +27,7 @@ export default function SearchScreen({navigation}) {
                     const productsArray = Object.keys(data).map((key) => ({
                         id: key,
                         ...data[key],
+                        category: 'fashion', // Add category for differentiation
                     }));
                     allData.push(...productsArray);
                 }
@@ -40,6 +40,7 @@ export default function SearchScreen({navigation}) {
                     const productsArray = Object.keys(data).map((key) => ({
                         id: key,
                         ...data[key],
+                        category: 'fresh', // Add category for differentiation
                     }));
                     allData.push(...productsArray);
                 }
@@ -58,30 +59,45 @@ export default function SearchScreen({navigation}) {
             setFilteredProducts(allProducts);
         } else {
             const filtered = allProducts.filter((product) =>
-                product.name.toLowerCase().includes(searchText.toLowerCase())
+                product.name?.toLowerCase().includes(searchText.toLowerCase())
             );
             setFilteredProducts(filtered);
         }
     }, [searchText, allProducts]);
 
+    const resultItem = ({ item }) => {
+        const navigateToDetails = () => {
+            if (item.category === 'fashion' || item.category === 'shirt' || item.category === 'jean') {
+                navigation.navigate('DetailFashion', { it: item });
+            } else if (item.category === 'fresh' || !item.category) {
+                navigation.navigate('DetailFreshFruit', { rp: item });
+            }
+        };
 
-    const resultItem = ({item}) => (
-        <TouchableOpacity
-            style={styles.productItem}
-            onPress={() => navigation.navigate('ProductDetailScreen', { productId: item.id })}
-        >
-            <Image  source={{ uri: item.colors?.[0]?.images?.[0] || item.img?.[0] }}  style={styles.productImage}/>
-            <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.productRating}>⭐ {item.star}</Text>
-            <Text style={styles.productPrice}>${item.price}</Text>
-        </TouchableOpacity>
-    );
+        // Safely handle the image source with optional chaining and fallback URL
+        const imageUri = (item.colors && item.colors.length > 0 && item.colors[0].images && item.colors[0].images.length > 0)
+            ? item.colors[0].images[0]
+            : item.img?.[0]
+            ?? 'https://via.placeholder.com/150';
+
+        return (
+            <TouchableOpacity
+                style={styles.productItem}
+                onPress={navigateToDetails}
+            >
+                <Image source={{ uri: imageUri }} style={styles.productImage} />
+                <Text style={styles.productName}>{item.name ?? 'No name available'}</Text>
+                <Text style={styles.productRating}>⭐ {item.star || item.rating || 'N/A'}</Text>
+                <Text style={styles.productPrice}>${item.price || 'N/A'}</Text>
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <CommonLayout title={'Search'}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.searchBar}>
-                    <Icon name="search" size={wp('5%')} color="#aaa"/>
+                    <Icon name="search" size={wp('5%')} color="#aaa" />
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Search for product"
@@ -100,7 +116,6 @@ export default function SearchScreen({navigation}) {
                     />
                 </View>
             </ScrollView>
-
         </CommonLayout>
     );
 }
@@ -156,5 +171,4 @@ const styles = StyleSheet.create({
         color: '#E57373',
         fontWeight: 'bold',
     },
-
 });
