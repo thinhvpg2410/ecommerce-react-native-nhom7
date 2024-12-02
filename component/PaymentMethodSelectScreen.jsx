@@ -18,6 +18,10 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
     const [selectedPaymentType, setSelectedPaymentType] = useState(null);
     const [paymentMethods, setPaymentMethods] = useState([]);
     const {totalAmount} = route.params;
+
+    const vatAmount = totalAmount * 0.08; // 8% VAT
+    const grandTotal = totalAmount + vatAmount;
+
     const formatCurrencyVND = (number) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
       };
@@ -53,9 +57,9 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
         Alert.alert('Payment Successful', `You have paid ${formatCurrencyVND(totalAmount)} using ${selectedMethod.type}`);
         navigation.navigate('PaymentSuccessScreen', {
             subtotal: totalAmount,
-            tax: 0,
+            tax: vatAmount,
             fees: 0,
-            totalAmount: totalAmount,
+            totalAmount: grandTotal,
             cardType: selectedMethod.type,
             cardNumber: selectedMethod.number ? `**** ${selectedMethod.number.slice(-4)}` : '',
         });
@@ -266,8 +270,12 @@ const PaymentMethodSelectScreen = ({route, navigation}) => {
                 <Icon name="arrow-back" size={24} color="black" />
             </TouchableOpacity>
             <Text style={styles.header}>Payment</Text>
-            <Text style={styles.totalLabel}>TOTAL</Text>
+            <Text style={styles.totalLabel}>Subtotal</Text>
             <Text style={styles.totalAmount}>{formatCurrencyVND(totalAmount)}</Text>
+            <Text style={styles.totalLabel}>VAT (8%)</Text>
+            <Text style={styles.totalAmount}>{formatCurrencyVND(vatAmount)}</Text>
+            <Text style={styles.totalLabel}>TOTAL</Text>
+            <Text style={styles.totalAmount}>{formatCurrencyVND(grandTotal)}</Text>
 
             {paymentMethods.map(renderPaymentMethod)}
 

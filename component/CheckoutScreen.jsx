@@ -162,17 +162,6 @@ const CheckoutScreen = ({navigation}) => {
                         keyExtractor={(item) => item.uniqueId}
                         contentContainerStyle={styles.listContainer}
                     />
-                    <View style={styles.voucherContainer}>
-                        <TextInput
-                            style={styles.voucherInput}
-                            placeholder="Enter voucher code"
-                            value={voucher}
-                            onChangeText={setVoucher}
-                        />
-                        <TouchableOpacity style={styles.applyButton}>
-                            <Text style={styles.applyButtonText}>Apply</Text>
-                        </TouchableOpacity>
-                    </View>
                     <View style={styles.totalContainer}>
                         <Text style={styles.totalLabel}>TOTAL</Text>
                         <Text style={styles.totalAmount}>{formatCurrencyVND(calculateTotal())}</Text>
