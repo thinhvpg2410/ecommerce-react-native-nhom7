@@ -31,12 +31,14 @@ export default function SignUpScreen({ navigation }) {
     createUserWithEmailAndPassword(getAuth(), email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        const defaultPhotoURL = 'https://www.svgrepo.com/show/452030/avatar-default.svg';
         setDoc(doc(db, "users", user.uid), {
           name: name,
           email: email,
+          photoUrl: defaultPhotoURL,
           createdAt: new Date(),
         }).then(() => {
-          setUser({ name, email }); 
+          setUser({ name, email, photoUrl: defaultPhotoURL });
           alert('Đăng ký thành công');
           navigation.navigate('SignIn');
         }).catch((error) => {

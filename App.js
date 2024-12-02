@@ -16,6 +16,8 @@ import PaymentSuccessScreen from "./component/PaymentSuccessScreen";
 import PaymentMethodSelectScreen from "./component/PaymentMethodSelectScreen";
 import SearchScreen from "./component/SearchScreen";
 import ChatScreen from './component/ChatScreen';
+import Profile from "./component/Profile";
+import ProfileDetail from "./component/ProfileDetail";
 const Stack = createStackNavigator();
 
 function AppNavigator() {
@@ -52,6 +54,8 @@ function AppNavigator() {
             <Stack.Screen name="PaymentMethodSelectScreen" component={PaymentMethodSelectScreen} options={{ headerShown: false }} />
             <Stack.Screen name="PaymentSuccessScreen" component={PaymentSuccessScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <Stack.Screen name="ProfileDetail" component={ProfileDetail} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }

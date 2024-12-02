@@ -11,7 +11,7 @@ import {getDatabase, onValue, ref} from "firebase/database";
 const CommonLayout = ({ title, children }) => {
     const navigation = useNavigation();
     const route = useRoute();
-    const { userName } = useUser();
+    const { userName, userPhotoUrl } = useUser();
     const [menuVisible, setMenuVisible] = useState(false);
     const [cartItemCount, setCartItemCount] = useState(0);
 
@@ -93,7 +93,7 @@ const CommonLayout = ({ title, children }) => {
                             onDismiss={closeMenu}
                             anchor={
                                 <TouchableOpacity onPress={openMenu} style={styles.avatarContainer}>
-                                    <Image source={require('../assets/Rectangle.png')} style={styles.avatar} />
+                                    <Image source={{uri: userPhotoUrl}} style={styles.avatar} />
                                     {userName && (
                                         <Text style={styles.welcomeText}>{userName}</Text>
                                     )}

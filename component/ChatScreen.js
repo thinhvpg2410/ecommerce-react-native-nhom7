@@ -81,13 +81,14 @@ const ChatScreen = () => {
           }}
         />
       </View>
+      <View style={{marginBottom:'-700%'}}></View>
     </CommonLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height:670,
+    height:640,
   },
 });
 
