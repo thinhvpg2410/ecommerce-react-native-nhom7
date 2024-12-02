@@ -35,7 +35,7 @@ const Profile = ({navigation}) => {
                 </View>
 
                 <View style={styles.sectionContainer}>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('ProfileDetail')}>
                         <View style={styles.menuItemContent}>
                             <Icon name="person" size={wp('6%')} color="#000"/>
                             <Text style={styles.menuText}>Biodata</Text>
