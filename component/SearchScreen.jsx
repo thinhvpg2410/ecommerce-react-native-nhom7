@@ -15,18 +15,42 @@ export default function SearchScreen({navigation}) {
     const db = getDatabase(firebaseApp);
 
     useEffect(() => {
-        const productsRef = ref(db, 'fashion');
-        onValue(productsRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                const productsArray = Object.keys(data).map((key) => ({
-                    id: key,
-                    ...data[key],
-                }));
-                setAllProducts(productsArray);
-                setFilteredProducts(productsArray);
-            }
-        });
+        const fashionRef = ref(db, 'fashion');
+        const freshFruitRef = ref(db, 'fresh_fruit_data');
+
+        const fetchProducts = () => {
+            const allData = [];
+
+            // Get fashion data
+            onValue(fashionRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const productsArray = Object.keys(data).map((key) => ({
+                        id: key,
+                        ...data[key],
+                    }));
+                    allData.push(...productsArray);
+                }
+            });
+
+            // Get fresh fruit data
+            onValue(freshFruitRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const productsArray = Object.keys(data).map((key) => ({
+                        id: key,
+                        ...data[key],
+                    }));
+                    allData.push(...productsArray);
+                }
+            });
+
+            // Set all products
+            setAllProducts(allData);
+            setFilteredProducts(allData);
+        };
+
+        fetchProducts();
     }, []);
 
     useEffect(() => {
@@ -46,7 +70,7 @@ export default function SearchScreen({navigation}) {
             style={styles.productItem}
             onPress={() => navigation.navigate('ProductDetailScreen', { productId: item.id })}
         >
-            <Image source={{uri: item.colors[0].images[0]}} style={styles.productImage}/>
+            <Image  source={{ uri: item.colors?.[0]?.images?.[0] || item.img?.[0] }}  style={styles.productImage}/>
             <Text style={styles.productName}>{item.name}</Text>
             <Text style={styles.productRating}>⭐ {item.star}</Text>
             <Text style={styles.productPrice}>${item.price}</Text>
@@ -71,7 +95,7 @@ export default function SearchScreen({navigation}) {
                     <FlatList
                         data={filteredProducts}
                         renderItem={resultItem}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item, index) => `${item.id}-${index}`}
                         numColumns={2}
                     />
                 </View>
