@@ -7,15 +7,16 @@ import { getAuth } from 'firebase/auth';
 import firebaseApp from '../utils/FirebaseConfig';
 
 
-const PaymentSuccessScreen = ({navigation, route}) => {
-    const { subtotal, tax, fees, totalAmount, cardType, cardNumber } = route.params;
+const PaymentSuccessScreen = ({ navigation, route }) => {
+    const { subtotal, tax, totalAmount, cardType, cardNumber } = route.params;
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const realTimeDb = getDatabase(firebaseApp);
     const user = auth.currentUser;
-     const formatCurrencyVND = (number) => {
+
+    const formatCurrencyVND = (number) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
-      };
+    };
 
     useEffect(() => {
         const saveOrderAndClearCart = async () => {
@@ -35,7 +36,6 @@ const PaymentSuccessScreen = ({navigation, route}) => {
                                 userId: userId,
                                 subtotal: subtotal,
                                 tax: tax,
-                                fees: fees,
                                 totalAmount: totalAmount,
                                 cardType: cardType,
                                 cardNumber: `**** ${cardNumber.slice(-4)}`,
@@ -59,14 +59,10 @@ const PaymentSuccessScreen = ({navigation, route}) => {
         saveOrderAndClearCart();
     }, []);
 
-    const handleBackToHome = () => {
-        navigation.navigate('Home');
-    };
-
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
-                <FontAwesome name="check-circle" size={80} color="#28a745"/>
+                <FontAwesome name="check-circle" size={80} color="#28a745" />
             </View>
             <Text style={styles.successMessage}>Order placed successfully!</Text>
             <Text style={styles.subMessage}>Thanks for purchasing</Text>
@@ -77,17 +73,13 @@ const PaymentSuccessScreen = ({navigation, route}) => {
                     <Text style={styles.summaryValue}>{formatCurrencyVND(subtotal)}</Text>
                 </View>
                 <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Tax (10%)</Text>
+                    <Text style={styles.summaryLabel}>Tax (8%)</Text>
                     <Text style={styles.summaryValue}>{formatCurrencyVND(tax)}</Text>
                 </View>
-                <View style={styles.summaryRow}>
-                    <Text style={styles.summaryLabel}>Fees</Text>
-                    <Text style={styles.summaryValue}>{formatCurrencyVND(fees)}</Text>
-                </View>
-                <View style={styles.divider}/>
+                <View style={styles.divider} />
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>Card</Text>
-                    <Text style={styles.summaryValue}>{cardType} **** {cardNumber.slice(-4)}</Text>
+                    <Text style={styles.summaryValue}>{cardType} {cardNumber}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryLabel}>Total</Text>
@@ -97,17 +89,18 @@ const PaymentSuccessScreen = ({navigation, route}) => {
 
             <Text style={styles.ratingPrompt}>How was your experience?</Text>
             <View style={styles.ratingContainer}>
-                {Array.from({length: 5}).map((_, index) => (
-                    <FontAwesome key={index} name="star" size={24} color="#f2b01e"/>
+                {Array.from({ length: 5 }).map((_, index) => (
+                    <FontAwesome key={index} name="star" size={24} color="#f2b01e" />
                 ))}
             </View>
 
-            <TouchableOpacity style={styles.homeButton} onPress={handleBackToHome}>
+            <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate('Home')}>
                 <Text style={styles.homeButtonText}>Back to Home</Text>
             </TouchableOpacity>
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

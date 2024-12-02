@@ -27,8 +27,8 @@ export default function FreshFruitDetail({navigation, route}) {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filteredProducts1, setFilteredProducts1] = useState([]);
     const formatCurrencyVND = (number) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
-      };
+        return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(number);
+    };
     const toggleShowAll = () => {
         setShowAll(!showAll)
     }
@@ -121,7 +121,7 @@ export default function FreshFruitDetail({navigation, route}) {
                         {/* banner */}
                         <View style={{width: '100%', height: 150, marginBottom: 15}}>
                             <Swiper
-                                style={{height: '100%', height: '100%'}}
+                                style={{height: '100%'}}
                                 dot={<View style={{
                                     backgroundColor: 'rgba(0,0,0,.2)',
                                     width: 10,
@@ -212,7 +212,10 @@ export default function FreshFruitDetail({navigation, route}) {
                                                     }}>
                                                         <Image source={item.rating} style={{width: 80, height: 15}}/>
                                                         <Text
-                                                            style={{fontWeight: 700, fontSize: 15}}>{formatCurrencyVND(item.price)}</Text>
+                                                            style={{
+                                                                fontWeight: 700,
+                                                                fontSize: 15
+                                                            }}>{formatCurrencyVND(item.price)}</Text>
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>
@@ -290,7 +293,10 @@ export default function FreshFruitDetail({navigation, route}) {
                                                     <TouchableOpacity>
                                                         <Image source={require('../assets/Button_Add.png')}/>
                                                     </TouchableOpacity>
-                                                    <Text style={{fontWeight: 600, fontSize: 16}}>{formatCurrencyVND(item.price)}</Text>
+                                                    <Text style={{
+                                                        fontWeight: 600,
+                                                        fontSize: 16
+                                                    }}>{formatCurrencyVND(item.price)}</Text>
                                                 </View>
                                             </TouchableOpacity>
                                         )}
