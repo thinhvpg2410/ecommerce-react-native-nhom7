@@ -115,7 +115,7 @@ const CommonLayout = ({ title, children }) => {
                     {[
                         { name: 'Home', icon: 'home' },
                         { name: 'Search', icon: 'search' },
-                        { name: 'Favorites', icon: 'heart' },
+                        { name: 'Chat', icon: 'chatbubble' },
                         { name: 'Messages', icon: 'mail' },
                         { name: 'Profile', icon: 'person' },
                     ].map((item) => (

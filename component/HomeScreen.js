@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity, ScrollView, TextInput} from 'react-native';
+import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity, ScrollView, TextInput,Button} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {bottomNav, categories} from "../data";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -90,8 +90,17 @@ export default function HomeScreen({navigation}) {
                         showsHorizontalScrollIndicator={false}
                     />
                 </View>
+                <View>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Chat')} style={styles.imgtl}>
+            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8649/8649595.png' }} style={{ width: 100, height: 100 }} />
+        </TouchableOpacity>
+        </View>
                 <View style={{marginBottom: '-500%'}}></View>
+           
+           
             </ScrollView>
+            
 
         </CommonLayout>
 
@@ -199,5 +208,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         paddingVertical: hp('1.5%'),
+    },
+    imgtl:{
+        position:'absolute',
+        bottom:20,
+        width:100,
+        height:100,
+        bottom:150,
+        right:5,
     },
 });
