@@ -12,6 +12,9 @@ export default function DetailFashionScreen({ navigation, route }) {
   const [mainImage, setMainImage] = useState(selectedColor.images[0]);
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
+  const formatCurrencyVND = (number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+  };
 
   const handleColorChange = (color) => {
     setSelectedColor(color);
@@ -72,7 +75,7 @@ export default function DetailFashionScreen({ navigation, route }) {
         <View style={styles.container}>
           <Image source={{ uri: mainImage }} style={styles.mainImage} />
           <View style={{flexDirection:'row', alignItems:'center'}}>
-          <Text style={styles.price}>${it.price}</Text>
+          <Text style={styles.price}>{formatCurrencyVND(it.price)}</Text>
           <Text style={styles.discount}>{it.discount}</Text>
           </View>
           <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between',marginTop:2}}>
@@ -125,7 +128,7 @@ export default function DetailFashionScreen({ navigation, route }) {
               <Text style={styles.quantityButton}>+</Text>
             </TouchableHighlight>
           </View>
-          <Text style={[styles.quantityButton,{fontSize:20}]}>Total: ${total}</Text>
+          <Text style={[styles.quantityButton,{fontSize:20}]}>Total: {formatCurrencyVND(total)}</Text>
 </View>
 
           <TouchableOpacity

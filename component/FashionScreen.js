@@ -12,6 +12,9 @@ export default function FashionScreen({ navigation, route }) {
 
   const db = getDatabase(firebaseApp);
   const dataRef = ref(db, 'fashion'); 
+  const formatCurrencyVND = (number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+  };
 
   const getData = async (category, gender) => {  
     try {
@@ -58,7 +61,7 @@ export default function FashionScreen({ navigation, route }) {
         )}
         <View style={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
           <Text style={styles.textP}>{item.name}</Text>
-          <Text style={styles.textprice}>${item.price}</Text>
+          <Text style={styles.textprice}>{formatCurrencyVND(item.price)}</Text>
           <Image source={{ uri: item.imgrating }} style={{ width: 100, height: 20, marginBottom: 10 }} />
         </View>
       </TouchableOpacity>

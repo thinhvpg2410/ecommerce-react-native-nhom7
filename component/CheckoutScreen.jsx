@@ -13,6 +13,9 @@ const CheckoutScreen = ({navigation}) => {
     const [cartItems, setCartItems] = useState([]);
     const db = getDatabase(firebaseApp);
     const auth = getAuth(firebaseApp);
+    const formatCurrencyVND = (number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+      };
 
     const handleBackPress = () => {
         navigation.goBack()
@@ -107,7 +110,7 @@ const CheckoutScreen = ({navigation}) => {
             <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemDescription}>{item.description}</Text>
-                <Text style={styles.itemPrice}>${item.price}</Text>
+                <Text style={styles.itemPrice}>{formatCurrencyVND(item.price)}</Text>
                 <Text style={styles.itemPrice}>{item.type}</Text>
                 {/*<Text style={styles.itemPrice}>{item.color}</Text>*/}
             </View>
@@ -172,7 +175,7 @@ const CheckoutScreen = ({navigation}) => {
                     </View>
                     <View style={styles.totalContainer}>
                         <Text style={styles.totalLabel}>TOTAL</Text>
-                        <Text style={styles.totalAmount}>${calculateTotal()}</Text>
+                        <Text style={styles.totalAmount}>{formatCurrencyVND(calculateTotal())}</Text>
                     </View>
 
                     <TouchableOpacity
