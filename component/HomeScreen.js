@@ -22,7 +22,6 @@ export default function HomeScreen({navigation}) {
         </TouchableOpacity>
     )
 
-    
 
     const renderRcmProducts = ({item}) => (
         <TouchableOpacity style={styles.productItem}>
@@ -66,16 +65,16 @@ export default function HomeScreen({navigation}) {
 
                 <View style={{padding: 10}}>
                     <View style={{marginBottom: 5}}>
-                        <Image source={{uri: 'https://placehold.co/300x150'}}
+                        <Image source={require('../assets/Container 6.png')}
                                style={{width: '100%', height: 150, borderRadius: wp('2%')}}
                         />
                     </View>
                     <View style={{flexDirection: 'row'}}>
-                        <Image source={{uri: 'https://placehold.co/300x150'}}
-                               style={{width: '50%', height: 100, borderRadius: wp('2%')}}
+                        <Image source={require('../assets/Container 7.png')}
+                               style={{width: '50%', height: 100, borderRadius: wp('2%'), resizeMode: "stretch"}}
                         />
-                        <Image source={{uri: 'https://placehold.co/300x150'}}
-                               style={{width: '50%', height: 100, borderRadius: wp('2%')}}
+                        <Image source={require('../assets/Container 8.png')}
+                               style={{width: '50%', height: 100, borderRadius: wp('2%'), resizeMode: "stretch"}}
                         />
                     </View>
                 </View>

@@ -9,6 +9,7 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [userEmail, setUserEmail] = useState(null);
+    const [userPhotoUrl, serUserPhotoUrl] = useState(null)
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -25,6 +26,7 @@ export const UserProvider = ({ children }) => {
                                 const userData = userDocSnap.data();
                                 setUserName(userData.name);
                                 setUserEmail(userData.email);
+                                serUserPhotoUrl(userData.photoUrl)
                             } else {
                                 console.error('User document does not exist!');
                             }
@@ -32,9 +34,9 @@ export const UserProvider = ({ children }) => {
                             console.error('Error fetching user data:', error);
                         }
                     } else {
-
                         setUserName(null);
                         setUserEmail(null);
+                        serUserPhotoUrl(null)
                     }
                     setLoading(false);
                 });
@@ -57,7 +59,7 @@ export const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ userName, userEmail }}>
+        <UserContext.Provider value={{ userName, userEmail, userPhotoUrl }}>
             {children}
         </UserContext.Provider>
     );

@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, Alert, Keyboard} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
+import {getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithCredential} from "firebase/auth";
 import {firebaseApp} from '../utils/FirebaseConfig';
 import {getFirestore, doc, getDoc} from 'firebase/firestore';
 import {useUser} from "../context/UserContext";
+import * as Google from 'expo-auth-session/providers/google';
+import {GOOGLE_CLIENT_ID} from '@env';
 
 export default function SignInScreen({navigation}) {
     const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +14,9 @@ export default function SignInScreen({navigation}) {
     const [password, setPassword] = useState('');
     const db = getFirestore(firebaseApp);
     const {setUserName, setUserEmail} = useUser();
-
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+        clientId: GOOGLE_CLIENT_ID,
+    });
 
     const handleForgetPassword = () => {
         if (email === '') {
@@ -70,6 +74,39 @@ export default function SignInScreen({navigation}) {
                 alert(errorMessage);
             });
     };
+
+    const handleGoogleSignIn = async () => {
+        promptAsync();
+    };
+
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const {id_token} = response.params;
+            const auth = getAuth();
+            const credential = GoogleAuthProvider.credential(id_token);
+            signInWithCredential(auth, credential)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const userRef = doc(db, 'users', user.uid);
+                    getDoc(userRef)
+                        .then((docSnap) => {
+                            if (docSnap.exists()) {
+                                const userData = docSnap.data();
+                                alert('Login successful: Welcome ' + userData.name);
+                                navigation.navigate('Home');
+                            } else {
+                                alert('No user data found!');
+                            }
+                        })
+                        .catch((error) => {
+                            alert('Error fetching user data: ' + error.message);
+                        });
+                })
+                .catch((error) => {
+                    alert('Error signing in with Google: ' + error.message);
+                });
+        }
+    }, [response]);
 
     return (
         <View style={styles.container}>
@@ -146,14 +183,14 @@ export default function SignInScreen({navigation}) {
                 <View style={{borderBottomWidth: 1, width: '35%', borderBottomColor: 'grey'}}></View>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around', marginTop: 20}}>
-                <TouchableOpacity>
-                    <Image source={require('../assets/logos_facebook.png')} style={{width: 60, height: 60}}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={require('../assets/logos_linkedin-icon.png')}
-                           style={{width: 60, height: 60}}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity>
+                {/*<TouchableOpacity>*/}
+                {/*    <Image source={require('../assets/logos_facebook.png')} style={{width: 60, height: 60}}></Image>*/}
+                {/*</TouchableOpacity>*/}
+                {/*<TouchableOpacity>*/}
+                {/*    <Image source={require('../assets/logos_linkedin-icon.png')}*/}
+                {/*           style={{width: 60, height: 60}}></Image>*/}
+                {/*</TouchableOpacity>*/}
+                <TouchableOpacity onPress={handleGoogleSignIn} disabled={!request}>
                     <Image source={require('../assets/grommet-icons_google.png')}
                            style={{width: 60, height: 60}}></Image>
                 </TouchableOpacity>
