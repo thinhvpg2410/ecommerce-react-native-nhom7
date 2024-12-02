@@ -13,6 +13,7 @@ const CheckoutScreen = ({navigation}) => {
     const [cartItems, setCartItems] = useState([]);
     const db = getDatabase(firebaseApp);
     const auth = getAuth(firebaseApp);
+    
     const formatCurrencyVND = (number) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
       };

@@ -115,6 +115,7 @@ export default function SearchScreen({ navigation }) {
                         numColumns={2}
                     />
                 </View>
+                <View style={{marginBottom:"-700%"}}></View>
             </ScrollView>
         </CommonLayout>
     );
